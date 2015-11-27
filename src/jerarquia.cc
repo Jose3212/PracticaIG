@@ -16,6 +16,7 @@ Jerarquia::Jerarquia(){
     numero_figuras = 0;
 }
 void Jerarquia::senialar(int i){
+
     if(trans < 5&&tipo == 0){
         trans++;
     }
@@ -26,87 +27,134 @@ void Jerarquia::senialar(int i){
     if(trans < -5){
         tipo=0;
     }
-    if(angle != -90){
-        angle = angle - 5;
-    }
+
     glMatrixMode(GL_MODELVIEW);
-    for(int n = 1; n< 5; n++){
+    glTranslatef(trans,trans,0);
+    for(int n = 0; n < figuras.size()-1; n++){
         glPushMatrix();
-        glTranslatef(trans,trans,0);
-        if(n!=1)glRotatef(angle,1,0,0);
-        else glRotatef(angle/2,0,0,1);
+        if(n==0){
+            glRotatef(angle_dedos,0,0,1);
+            glRotatef(angle_dedosb,0,1,0);
+        }
+        if(n>0 && n!=1 && n<5) {
+             glRotatef(angle_dedos,0,0,1);
+             glRotatef(angle_dedosb,1,0,0);
+//        glTranslatef(0,0,trans);
+        }
+        else if(n==1){
+            glRotatef(angle_munieca,0,0,1);
+        }
+        else if(n==5)glRotatef(angle_munieca,0,0,1);
+        else if(n==6)glRotatef(angle_brazo,0,0,1);
+//        glTranslatef(trans,trans,0);
         figuras[n].drawModel(i);
         glPopMatrix();
     }
     glPushMatrix();
-    glTranslatef(trans,trans,0);
-    glRotatef(-90,0,1,0);
-    //glRotatef(-45,0,0,1);
-    figuras[0].drawModel(i);
+    //glTranslatef(trans,trans,0);
+    glRotatef(angle_dedos,0,0,1);
+    glRotatef(angle_dedosb,1,0,0);
+    figuras[7].drawModel(i);
     glPopMatrix();
-    for(int n = 5; n < figuras.size(); n++){
-        glPushMatrix();
-        glTranslatef(trans,trans,0);
-        glRotatef(-45,0,0,1);
-        figuras[n].drawModel(i);
-        glPopMatrix();
-    }
+
 }
-void Jerarquia::barcenas(int i){
+void Jerarquia::indice(int i){
 //    if(trans < 1){
 //        trans+=-0.1;
 //    }
-    if(angle > -90&&tipo == 0){
-        angle-=5;
+    if(angle_dedosb > -90&&tipo == 0){
+        angle_dedosb-=5;
     }
     else{
-        angle+=5;
+        angle_dedosb+=5;
         tipo=1;
     }
-    if(angle > 0){
+    if(angle_dedosb > 0){
         tipo=0;
     }
     glMatrixMode(GL_MODELVIEW);
+    glTranslatef(trans,trans,0);
     //glLoadIdentity();
     for(int n = 0; n <5;n++){
     glPushMatrix();
     if(n==0){
-        glRotatef(angle,0,1,0);
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,0,1,0);
 //        glTranslatef(0,0,trans);
     }
-    if(n>0 && n!=2) {
-        glRotatef(angle,1,0,0);
+    if(n>0 && n!=1) {
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,1,0,0);
 //        glTranslatef(0,0,trans);
+    }
+    else if(n==1){
+        glRotatef(angle_munieca,0,0,1);
     }
     figuras[n].drawModel(i);
     glPopMatrix();
     }
+    glPushMatrix();
+    glRotatef(angle_munieca,0,0,1);
     figuras[5].drawModel(i);
+    glPopMatrix();
+    glPushMatrix();
+    glRotatef(angle_brazo,0,0,1);
     figuras[6].drawModel(i);
+    glPopMatrix();
+    glPushMatrix();
+    //glTranslatef(trans,trans,0);
+    glRotatef(angle_dedos,0,0,1);
+    glRotatef(angle_dedosb,1,0,0);
+    figuras[7].drawModel(i);
+    glPopMatrix();
 }
 void Jerarquia::saludar(int i){
-    if(angle < 25&&tipo == 0){
-        angle+=5;
+    if(angle_brazo < 25&&tipo == 0){
+        angle_brazo+=5;
+        angle_munieca+=5;
+        angle_dedos+=5;
     }
     else{
-        angle-=5;
+        angle_brazo-=5;
+        angle_munieca-=5;
+        angle_dedos-=5;
         tipo=1;
     }
-    if(angle < -25){
+    if(angle_brazo < -25){
         tipo=0;
     }
-    double angulo = angle/2;
     glMatrixMode(GL_MODELVIEW);
+    glTranslatef(trans,trans,0);
     //glLoadIdentity();
-    for(int n = 0; n <figuras.size();n++){
+    for(int n = 0; n <figuras.size()-1;n++){
     glPushMatrix();
-    if(n<6){
-    glRotatef(angle,0,0,1);
+    if(n<5){
+    if(n==0){
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,0,1,0);
+//        glTranslatef(0,0,trans);
     }
-    else glRotatef(angulo,0,0,1);
+    if(n>0 && n!=1) {
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,1,0,0);
+//        glTranslatef(0,0,trans);
+    }
+    else if(n==1){
+        glRotatef(angle_munieca,0,0,1);
+    }
+    }
+    else if(n<6) glRotatef(angle_munieca,0,0,1);
+    else glRotatef(angle_brazo,0,0,1);
     figuras[n].drawModel(i);
     glPopMatrix();
-    }/*
+    }
+    glPushMatrix();
+    //glTranslatef(trans,trans,0);
+    glRotatef(angle_dedos,0,0,1);
+    glRotatef(angle_dedosb,1,0,0);
+    figuras[7].drawModel(i);
+    glPopMatrix();
+    /*
     glPushMatrix();
     glRotatef(angle,0,1,0);
     figuras[5].drawModel(i);
@@ -115,29 +163,54 @@ void Jerarquia::saludar(int i){
 }
 void Jerarquia::girar_munieca(int i){
     //cout<<"Entramos"<<endl;
-    if(angle < 90&&tipo == 0){
-        angle+=5;
+    //angle_munieca = angle_brazo;
+    if(angle_munieca < angle_brazo+25&&tipo == 0){
+        angle_munieca+=5;
+        angle_dedos+=5;
     }
     else{
-        angle-=5;
+        angle_munieca-=5;
+        angle_dedos-=5;
         tipo=1;
     }
-    if(angle < 0){
+    if(angle_munieca < angle_brazo-25){
         tipo=0;
     }
     //else angle-=5;
     glMatrixMode(GL_MODELVIEW);
+    glTranslatef(trans,trans,0);
     //glLoadIdentity();
     for(int n = 0; n <5;n++){
     glPushMatrix();
-    glRotatef(angle,0,1,0);
+    if(n==0){
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,0,1,0);
+//        glTranslatef(0,0,trans);
+    }
+    if(n>0 && n!=1) {
+        glRotatef(angle_dedos,0,0,1);
+        glRotatef(angle_dedosb,1,0,0);
+//        glTranslatef(0,0,trans);
+    }
+    else if(n==1){
+        glRotatef(angle_munieca,0,0,1);
+    }
     figuras[n].drawModel(i);
     glPopMatrix();
     }
     glPushMatrix();
-    glRotatef(angle,0,1,0);
+    glRotatef(angle_munieca,0,0,1);
     figuras[5].drawModel(i);
     glPopMatrix();
+    glPushMatrix();
+    glRotatef(angle_brazo,0,0,1);
     figuras[6].drawModel(i);
+    glPopMatrix();
+    glPushMatrix();
+    //glTranslatef(trans,trans,0);
+    glRotatef(angle_dedos,0,0,1);
+    glRotatef(angle_dedosb,1,0,0);
+    figuras[7].drawModel(i);
+    glPopMatrix();
     //cout<<"No tengo ni puta idea como va"<<endl;
 }

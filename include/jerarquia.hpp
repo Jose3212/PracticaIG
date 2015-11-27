@@ -5,7 +5,10 @@ class Jerarquia : public Modelo{
 private:
     vector <Modelo> figuras;
     int numero_figuras;
-    double angle = 0;
+    double angle_munieca = 0;
+    double angle_dedos = 0;
+    double angle_brazo = 0;
+    double angle_dedosb = 0;
     double trans = 0;
     double tipo = 0;
     double control[5];
@@ -16,7 +19,7 @@ public:
     void aniade_figura(Modelo figura);
     void girar_munieca(int i =4);
     void saludar(int i =4);
-    void barcenas(int i = 4);
+    void indice(int i = 4);
     void senialar(int i = 4);
 };
 #endif

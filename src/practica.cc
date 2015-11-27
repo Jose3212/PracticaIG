@@ -24,7 +24,7 @@ Jerarquia dedos;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 //Cubo c1(5);
 //Tetraedro t1(5);
-//ModeloPly ant("./data/ant.ply");
+ModeloPly ant("./data/ant.ply");
 //ModeloPly beethoven("./data/beethoven.ply");
 //ModeloPly big_dodge("./data/big_dodge.ply");
 //test1 perfil;
@@ -138,7 +138,7 @@ void draw_objects()
 		dedos.saludar(i);
 		break;
 	case 7:
-		dedos.barcenas(i);
+		dedos.indice(i);
 		break;
 	case 8:
 		dedos.senialar(i);
@@ -363,6 +363,10 @@ indice.trasladar_figurax(-2);
 anular.trasladar_figurax(-0.675);
 corazon.trasladar_figurax(0.675);
 menique.trasladar_figurax(2);
+ant.escalar(0.05);
+ant.trasladar_figurax(2);
+ant.trasladar_figuray(8.5);
+
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);
 dedos.aniade_figura(anular);
@@ -370,6 +374,7 @@ dedos.aniade_figura(corazon);
 dedos.aniade_figura(menique);
 dedos.aniade_figura(palma);
 dedos.aniade_figura(brazo);
+dedos.aniade_figura(ant);
 //perfil5.generarRevolucion(0,360);
 // asignación de la funcion llamada "dibujar" al evento de dibujo
 glutDisplayFunc(draw_scene);
