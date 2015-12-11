@@ -24,7 +24,7 @@ Jerarquia dedos;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
-ModeloPly ant("./data/ant.ply");
+//ModeloPly ant("./data/ant.ply");
 ModeloPly beethoven("./data/beethoven.ply");
 //ModeloPly big_dodge("./data/big_dodge.ply");
 //test1 perfil;
@@ -129,7 +129,8 @@ void draw_objects()
 		menique.drawModel(i);
 		break;
 	case 4:
-		beethoven.drawModel(i);
+		//beethoven.drawModel(i);
+		
 		beethoven.drawNormales();
 		break;
 	case 5:
@@ -285,12 +286,13 @@ glutPostRedisplay();
 void EnableLighting(void) {
 
 
-	GLfloat light_ambient[] = { .5, .5, .5, 1.0 };
-	GLfloat light_diffuse[] = { .9, .9, .9, 1.0 };
+
+	GLfloat light_ambient[] = { 1,1, 1, 1 };
+	GLfloat light_diffuse[] = { 1, 0, 0, 1 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 20.0, 10.0, 30.0, 1.0 };
-	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
-	float shininess = 20;
+	GLfloat light_position[] = { 1, 1, 1, 0 };
+	GLfloat matSpecular[] = {0.2, 0.2, 0.2, 0};
+	float shininess = 0.5;
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -304,14 +306,14 @@ void EnableLighting(void) {
 
 
 
-	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
+//	GLfloat emision[] = {0.2, 0.2, 0.2, 1.0};
+//	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
 
-//	glEnable(GL_SMOOTH);     // enable smooth shading
-//	glEnable(GL_LIGHTING);   // enable lighting
+	glEnable(GL_SMOOTH);     // enable smooth shading
+	glEnable(GL_LIGHTING);   // enable lighting
 	glEnable(GL_LIGHT0);     // enable light 0
-//	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
-//	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
+	glShadeModel(GL_SMOOTH);
 
 
 }
@@ -340,7 +342,7 @@ glClearColor(1,1,1,1);
 // se habilita el z-bufer
 glEnable(GL_DEPTH_TEST);
 //
-//EnableLighting();
+EnableLighting();
 change_projection();
 //
 glViewport(0,0,UI_window_width,UI_window_height);
@@ -380,7 +382,8 @@ glutInitWindowSize(UI_window_width,UI_window_height);
 // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 // al bucle de eventos)
 glutCreateWindow("Practica");
-
+beethoven.generarBarrido();
+/*
 pulgar.generarRevolucion(0,360);
 indice.generarRevolucion(0,360);
 anular.generarRevolucion(0,360);
@@ -397,12 +400,12 @@ indice.trasladar_figurax(-2);
 anular.trasladar_figurax(-0.675);
 corazon.trasladar_figurax(0.675);
 menique.trasladar_figurax(2);
-ant.escalar(0.05);
+/*ant.escalar(0.05);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
+*/
 
-//beethoven.generarBarrido();
-
+/*
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);
 dedos.aniade_figura(anular);
@@ -410,7 +413,9 @@ dedos.aniade_figura(corazon);
 dedos.aniade_figura(menique);
 dedos.aniade_figura(palma);
 dedos.aniade_figura(brazo);
-dedos.aniade_figura(ant);
+*/
+//dedos.aniade_figura(ant);
+//beethoven.generarBarrido();
 //perfil5.generarRevolucion(0,360);
 // asignación de la funcion llamada "dibujar" al evento de dibujo
 glutDisplayFunc(draw_scene);

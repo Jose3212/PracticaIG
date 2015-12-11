@@ -186,25 +186,20 @@ void Modelo::drawNormales(int i){
 	float t = 5;
 	int v1,v2,v3;
 	float x=0,y=0,z=0;
-	switch(i){
-	case 0:
-		dibujo = GL_POINTS; //Pintamos Puntos
-		x=1;
-		break;
-	case 1:
-		dibujo = GL_LINES; //Pintamos Lineas
-		y=1;
-		break;
-	case 4:
-		drawModel(0);
-		drawModel(1);
-	default:
-		dibujo = GL_TRIANGLES; //Dibujamos triangulos para el sólido, o modo ajedrez
-		x=0.8;
-		y=0.8;
-		z=0.8;
-		break;
+	if(i==0){
+		glBegin(GL_TRIANGLES);
+		for(int j =0; j < triangulos.size();j++){
+			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			v1 = triangulos.at(j)._0;
+			v2 = triangulos.at(j)._1;
+			v3 = triangulos.at(j)._2;
+			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
+			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
+			glVertex3f(vertices.at(v3).x, vertices.at(v3).y,vertices.at(v3).z);
+		}
+		glEnd();
 	}
+	/*
 	glPointSize(4);
 	glBegin(dibujo);
 	for (int i= 0; i < vertices.size(); i++)
@@ -220,4 +215,5 @@ void Modelo::drawNormales(int i){
             glVertex3f(_2.x, _2.y, _2.z);
         }
 	glEnd();
+	*/
 }
