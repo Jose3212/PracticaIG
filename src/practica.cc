@@ -22,10 +22,10 @@ Dedo menique;
 Dedo pulgar;
 Jerarquia dedos;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
-//Cubo c1(5);
-//Tetraedro t1(5);
+Cubo c1(5);
+Tetraedro t1(5);
 ModeloPly ant("./data/ant.ply");
-//ModeloPly beethoven("./data/beethoven.ply");
+ModeloPly beethoven("./data/beethoven.ply");
 //ModeloPly big_dodge("./data/big_dodge.ply");
 //test1 perfil;
 //test2 perfil2;
@@ -129,7 +129,8 @@ void draw_objects()
 		menique.drawModel(i);
 		break;
 	case 4:
-		dedos.dibujar(i);
+		beethoven.drawModel(i);
+		beethoven.drawNormales();
 		break;
 	case 5:
 		dedos.girar_munieca(i);
@@ -281,7 +282,39 @@ switch (Tecla1){
 glutPostRedisplay();
 }
 
+void EnableLighting(void) {
 
+
+	GLfloat light_ambient[] = { .5, .5, .5, 1.0 };
+	GLfloat light_diffuse[] = { .9, .9, .9, 1.0 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_position[] = { 20.0, 10.0, 30.0, 1.0 };
+	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
+	float shininess = 20;
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+
+
+	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
+
+//	glEnable(GL_SMOOTH);     // enable smooth shading
+//	glEnable(GL_LIGHTING);   // enable lighting
+	glEnable(GL_LIGHT0);     // enable light 0
+//	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
+//	glShadeModel(GL_SMOOTH);
+
+
+}
 
 //***************************************************************************
 // Funcion de incializacion
@@ -307,6 +340,7 @@ glClearColor(1,1,1,1);
 // se habilita el z-bufer
 glEnable(GL_DEPTH_TEST);
 //
+//EnableLighting();
 change_projection();
 //
 glViewport(0,0,UI_window_width,UI_window_height);
@@ -366,6 +400,8 @@ menique.trasladar_figurax(2);
 ant.escalar(0.05);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
+
+//beethoven.generarBarrido();
 
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);

@@ -25,7 +25,7 @@ LDFLAGS=  -lGLU -lGL -lglut
 
 # definicion del compilador
 #
-CC = g++ -Wno-write-strings
+CC = g++ -Wno-write-strings -std=c++11
 
 # orden que sera ejecutada por defecto
 #
