@@ -199,6 +199,21 @@ void Modelo::drawNormales(int i){
 		}
 		glEnd();
 	}
+	else{
+		glBegin(GL_POLYGON);
+		for(int j =0; j < triangulos.size();j++){
+			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			v1 = triangulos.at(j)._0;
+			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
+			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			v2 = triangulos.at(j)._1;
+			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
+			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			v3 = triangulos.at(j)._2;
+			glVertex3f(vertices.at(v3).x, vertices.at(v3).y,vertices.at(v3).z);
+		}
+		glEnd();
+	}
 	/*
 	glPointSize(4);
 	glBegin(dibujo);

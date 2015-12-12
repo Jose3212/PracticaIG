@@ -131,7 +131,7 @@ void draw_objects()
 	case 4:
 		//beethoven.drawModel(i);
 		
-		beethoven.drawNormales();
+		beethoven.drawNormales(i);
 		break;
 	case 5:
 		dedos.girar_munieca(i);
@@ -286,7 +286,7 @@ glutPostRedisplay();
 void EnableLighting(void) {
 
 
-
+/*
 	GLfloat light_ambient[] = { 1,1, 1, 1 };
 	GLfloat light_diffuse[] = { 1, 0, 0, 1 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -306,15 +306,15 @@ void EnableLighting(void) {
 
 
 
-//	GLfloat emision[] = {0.2, 0.2, 0.2, 1.0};
-//	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
+	GLfloat emision[] = {0.2, 0.2, 0.2, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
 
 	glEnable(GL_SMOOTH);     // enable smooth shading
 	glEnable(GL_LIGHTING);   // enable lighting
 	glEnable(GL_LIGHT0);     // enable light 0
 	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
 	glShadeModel(GL_SMOOTH);
-
+*/
 
 }
 
