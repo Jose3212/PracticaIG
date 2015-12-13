@@ -198,14 +198,14 @@ void Modelo::drawNormales(int i){
 	else{
 		glBegin(GL_TRIANGLES);
 		for(int j =0; j < triangulos.size();j++){
-			glNormal3f(normalesCara.at(j).x,normalesCara.at(j).y,normalesCara.at(j).z);
 			v1 = triangulos.at(j)._0;
-			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
-			glNormal3f(normalesCara.at(j).x,normalesCara.at(j).y,normalesCara.at(j).z);
 			v2 = triangulos.at(j)._1;
-			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
-			glNormal3f(normalesCara.at(j).x,normalesCara.at(j).y,normalesCara.at(j).z);
 			v3 = triangulos.at(j)._2;
+			glNormal3f(normalesCara.at(v1).x,normalesCara.at(v1).y,normalesCara.at(v1).z);
+			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
+			glNormal3f(normalesCara.at(v2).x,normalesCara.at(v2).y,normalesCara.at(v2).z);
+			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
+			glNormal3f(normalesCara.at(v3).x,normalesCara.at(v3).y,normalesCara.at(v3).z);
 			glVertex3f(vertices.at(v3).x, vertices.at(v3).y,vertices.at(v3).z);
 		}
 		glEnd();

@@ -25,7 +25,7 @@ Jerarquia dedos;
 Cubo c1(5);
 Tetraedro t1(5);
 ModeloPly ant("./data/ant.ply");
-//ModeloPly beethoven("./data/beethoven.ply");
+ModeloPly beethoven("./data/beethoven.ply");
 ModeloPly big_dodge("./data/big_dodge.ply");
 //test1 perfil;
 //test2 perfil2;
@@ -123,18 +123,14 @@ void draw_objects()
 		big_dodge.drawNormales(i);
 		break;
 	case 2:
-		corazon.drawModel(i);
+		beethoven.drawNormales(i);
 		break;
 	case 3:
 		menique.drawModel(i);
 		break;
 	case 4:
 		//beethoven.drawModel(i);
-		if(i==0){
-			glShadeModel(GL_FLAT);
-		}
-		else{glShadeModel(GL_SMOOTH);}
-		//beethoven.drawNormales(i);
+
 		//c1.dibujar_normales();
 		break;
 	case 5:
@@ -405,6 +401,7 @@ menique.trasladar_figurax(2);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
+beethoven.generarBarrido();
 ant.generarBarrido();
 big_dodge.generarBarrido();
 //beethoven.mostrar_normales();
