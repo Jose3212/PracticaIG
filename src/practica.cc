@@ -24,9 +24,12 @@ Jerarquia dedos;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
-ModeloPly ant("./data/ant.ply");
-ModeloPly beethoven("./data/beethoven.ply");
-ModeloPly big_dodge("./data/big_dodge.ply");
+ModeloPly peon1("./data/perfil.ply");
+ModeloPly peon2("./data/perfil.ply");
+ModeloPly peon3("./data/perfil.ply");
+ModeloPly lata_cue("./data/lata-psup.ply");
+ModeloPly lata_sup("./data/lata-pcue.ply");
+ModeloPly lata_inf("./data/lata-pinf.ply");
 //test1 perfil;
 //test2 perfil2;
 //test3 perfil3;
@@ -115,41 +118,12 @@ glEnd();
 
 void draw_objects()
 {
-	switch(j){
-	case 0:
-		ant.drawNormales(i);
-		break;
-	case 1:
-		big_dodge.drawNormales(i);
-		break;
-	case 2:
-		beethoven.drawNormales(i);
-		break;
-	case 3:
-		menique.drawModel(i);
-		break;
-	case 4:
-		//beethoven.drawModel(i);
-
-		//c1.dibujar_normales();
-		break;
-	case 5:
-		dedos.girar_munieca(i);
-		break;
-	case 6:
-		dedos.saludar(i);
-		break;
-	case 7:
-		dedos.indice(i);
-		break;
-	case 8:
-		dedos.senialar(i);
-		break;
-/*	case 9:
-		perfil5.drawModel(i);
-		break;
-*/
-	}
+	peon1.drawNormales(i);
+	peon2.drawNormales(i);
+	peon3.drawNormales(i);
+	lata_cue.drawNormales(i);
+	lata_sup.drawNormales(i);
+	lata_inf.drawNormales(i);
 }
 
 
@@ -296,16 +270,17 @@ void EnableLighting(void) {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-/*
+
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
+//	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-*/
+
 
 
 	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
+
 
 	glEnable(GL_SMOOTH);     // enable smooth shading
 	glEnable(GL_LIGHTING);   // enable lighting
@@ -401,10 +376,25 @@ menique.trasladar_figurax(2);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
-beethoven.generarBarrido();
-ant.generarBarrido();
-big_dodge.generarBarrido();
-//beethoven.mostrar_normales();
+
+lata_cue.generarRevolucion(0,360);
+lata_sup.generarRevolucion(0,360);
+lata_inf.generarRevolucion(0,360);
+peon1.generarRevolucion(0,360);
+peon2.generarRevolucion(0,360);
+peon3.generarRevolucion(0,360);
+lata_cue.escalar(5);
+lata_sup.escalar(5);
+lata_inf.escalar(5);
+peon1.trasladar_figurax(5);
+peon2.trasladar_figurax(-5);
+peon3.trasladar_figurax(2.5);
+lata_inf.generarBarrido();
+lata_sup.generarBarrido();
+lata_cue.generarBarrido();
+peon1.generarBarrido();
+peon2.generarBarrido();
+peon3.generarBarrido();
 /*
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);
