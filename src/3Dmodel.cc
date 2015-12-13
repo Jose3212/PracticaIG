@@ -40,34 +40,34 @@ void Modelo::generarBarrido(){
 	 *con el producto vectorial de esto obtenemos un vector perpendicular( o normal).
 	 *Con un vector normal y una cara podemos montar una figura 3D.
 	 */
-	vector<_vertex3f> norm_car;
+	//vector<_vertex3f> norm_car;
 	for (int i = 0; i < triangulos.size();i++){
-		_vertex3f a,b,c,ab,bc,normal;
+		_vertex3f a,b,c,ab,ac,normal;
 		a=vertices.at(triangulos.at(i).x);
 		b=vertices.at(triangulos.at(i).y);
 		c=vertices.at(triangulos.at(i).z);
-		ab.x=a.x-b.x;ab.y=a.y-b.y;ab.z=a.z-b.z;
-		bc.x=b.x-c.x;bc.y=b.y-c.y;bc.z=b.z-c.z;
-		normal.x = ab.y * bc.z - ab.z * bc.y;
-        normal.y = ab.z * bc.x - ab.x * bc.z;
-        normal.z = ab.x * bc.y - ab.y * bc.x;
+		ab.x=b.x-a.x;ab.y=b.y-a.y;ab.z=b.z-a.z;
+		ac.x=c.x-a.x;ac.y=c.y-a.y;ac.z=c.z-a.z;
+		normal.x = ab.y * ac.z - ab.z * ac.y;
+        normal.y = ab.z * ac.x - ab.x * ac.z;
+        normal.z = ab.x * ac.y - ab.y * ac.x;
 		normal=modulizar(normal);
-		norm_car.push_back(normal);
+		normalesCara.push_back(normal);
 	}
-	setNC(norm_car);
-	vector<_vertex3f> norm_vert;
+	//setNC(norm_car);
+	//vector<_vertex3f> norm_vert;
 	for(int j = 0; j < vertices.size();j++){
 		_vertex3f vert, normal(0,0,0);
 		vert = vertices.at(j);
 		for(int n = 0; n < triangulos.size();n++){
 			if((triangulos[n].x==j)||(triangulos[n].y==j)||(triangulos[n].z==j)){
-				normal = _vertex3f(normal.x + norm_car[n].x, normal.y + norm_car[n].y, normal.z + norm_car[n].z);
+				normal = _vertex3f(normal.x + normalesCara[n].x, normal.y + normalesCara[n].y, normal.z + normalesCara[n].z);
 			}
 		}
 		normal = modulizar(normal);
-		norm_vert.push_back(normal);
+		normalesVert.push_back(normal);
 	}
-	setNV(norm_vert);
+	//setNV(norm_vert);
 }
 _vertex3f Modelo::rotar(_vertex3f p, double alpha){
 	_vertex3f point;
@@ -181,6 +181,18 @@ void Modelo::drawModel(int i){
 	}
 	glEnd();
 }
+void Modelo::dibujar_normales(){
+	glPointSize(4);
+	glBegin(GL_POINTS);
+	for(int i =0; i < normalesVert.size();i++){
+		//glNormal3f(normalesCara.at(i).x,normalesCara.at(i).y,normalesCara.at(i).z);
+		glVertex3f(normalesVert.at(i).x,normalesVert.at(i).y,normalesVert.at(i).z);
+	}
+	glEnd();
+}
+void Modelo::mostrar_normales(){
+	for(int i = 0; i< normalesVert.size(); i++)cout<< " " << normalesVert.at(i).x << " - " << normalesVert.at(i).y << " - " << normalesCara.at(i).z << endl;
+}
 void Modelo::drawNormales(int i){
 	GLenum dibujo;
 	float t = 5;
@@ -189,7 +201,7 @@ void Modelo::drawNormales(int i){
 	if(i==0){
 		glBegin(GL_TRIANGLES);
 		for(int j =0; j < triangulos.size();j++){
-			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			glNormal3f(normalesCara.at(i).x,normalesCara.at(i).y,normalesCara.at(i).z);
 			v1 = triangulos.at(j)._0;
 			v2 = triangulos.at(j)._1;
 			v3 = triangulos.at(j)._2;
@@ -202,13 +214,13 @@ void Modelo::drawNormales(int i){
 	else{
 		glBegin(GL_POLYGON);
 		for(int j =0; j < triangulos.size();j++){
-			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			glNormal3f(normalesCara.at(i).x,normalesCara.at(i).y,normalesCara.at(i).z);
 			v1 = triangulos.at(j)._0;
 			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
-			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			glNormal3f(normalesCara.at(i).x,normalesCara.at(i).y,normalesCara.at(i).z);
 			v2 = triangulos.at(j)._1;
 			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
-			glNormal3f(triangulos.at(i).x,triangulos.at(i).y,triangulos.at(i).z);
+			glNormal3f(normalesCara.at(i).x,normalesCara.at(i).y,normalesCara.at(i).z);
 			v3 = triangulos.at(j)._2;
 			glVertex3f(vertices.at(v3).x, vertices.at(v3).y,vertices.at(v3).z);
 		}
