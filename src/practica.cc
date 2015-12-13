@@ -13,6 +13,8 @@
 #include "jerarquia.hpp"
 using namespace std;
 int i,j;
+float light_alpha = 0.0;
+float light_beta = 0.0;
 Brazo brazo;
 Palma palma;
 Dedo indice;
@@ -90,6 +92,38 @@ glRotatef(Observer_angle_x,1,0,0);
 glRotatef(Observer_angle_y,0,1,0);
 }
 
+void cambiaLuz(){
+	cout << "Alfa: " << light_alpha << ", Beta: " << light_beta << endl;	
+	GLfloat _light_position[4];
+	GLfloat _spotlight_direction[3];
+
+    GLfloat light_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	_light_position[0] =  0.0;
+	_light_position[1] = 1.0;
+	_light_position[2] = 0.0;
+	_light_position[3] = 0.0;
+
+	_spotlight_direction[0] = light_alpha;
+	_spotlight_direction[1] = light_beta;
+	_spotlight_direction[2] = 0.0;
+
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+
+	glDisable(GL_LIGHT0);
+
+    glEnable(GL_LIGHT1);
+    glLightfv(GL_LIGHT1, GL_POSITION, _light_position);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 10.0);
+    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
+    glLightfv(GL_LIGHT1,GL_SPOT_DIRECTION,_spotlight_direction);
+
+}
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
@@ -171,64 +205,32 @@ glutPostRedisplay();
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
 //Añadimos teclas para retocar el programa.
-	//if (toupper(Tecla1)=='Q') exit(0);
-	switch(Tecla1){
-	case '1':	//Tetraedro
-		j=0;
-		break;
-	case '2':	//Cubo
-		j=1;
-		break;
-	case '3':
-		j=2;
-		break;
-	case '4':
-		j=3;
-		break;
-	case '5':
-		j=4;
-		break;
-	case 'g':
-	case 'G':
-		j=5;
-		break;
-	case 'd':
-	case 'D':
-		j=6;
-		break;
-	case 'b':
-	case 'B':
-		j=7;
-		break;
-	case 'e':
-	case 'E':
-		j=8;
-		break;
-	case 'j':	//Ajedrez
-	case 'J':
-		i=2;
-		break;
-	case 'p':	//Puntos
-	case 'P':
-		i=0;
-		break;
-	case 's':	//Solido
-	case 'S':
-		i=3;
-		break;
-	case 'a':	//Aristas
-	case 'A':
-		i=1;
-		break;
-	case 'q':	//Salida
-	case 'Q':
-		exit(0);
-		break;
-	case 't':	//todo
-	case 'T':
-		i=4;
-		break;
-	}
+		if (toupper(Tecla1)=='Q') exit(0);
+		switch (toupper(Tecla1)){
+			
+			case 'A': // aumentar el valor de β
+				light_beta +=0.1;
+				cambiaLuz();
+				break;
+			case 'Z': // disminuir el valor de β
+				light_beta-=0.1;
+				cambiaLuz();
+				break;
+			case 'X': // aumentar el valor de α
+				light_alpha+=0.1;
+				cambiaLuz();
+				break;
+			case 'C': // disminuir el valor de α
+				light_alpha-=0.1;
+				cambiaLuz();
+				break;
+			case 'P':
+				i=0;
+				break;
+			case 'O':
+				i=1;
+				break;
+		}
 	//Pintamos de nuevo
 	glutPostRedisplay();
 }
@@ -272,7 +274,7 @@ void EnableLighting(void) {
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-//	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 

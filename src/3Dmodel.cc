@@ -123,6 +123,7 @@ void Modelo::generarRevolucion(float angulo_inicial, float angulo_final){
 	
 	setVert(puntos);
 	setTrian(triang);
+	generar_matrix_textura(pasos,perfil.size());
 }
 void Modelo::drawModel(int i){
 	GLenum dibujo;
@@ -227,4 +228,22 @@ void Modelo::drawNormales(int i){
         }
 	glEnd();
 	*/
+}
+void Modelo::generar_matrix_textura(int n, int m){
+	double distancias[m];
+	distancias[0]=0;
+	for(unsigned int k=1; k<m; k++)distancias[k] = distancias[k-1] + distancia(vertices[k-1], vertices[k]);
+	for(unsigned int i=0; i<n; i++){
+        for(unsigned int j=0; j<m; j++){
+            float si = (float)i/(n-1);
+            float tj = distancias[j]/distancias[m-1];
+            texturas.push_back(_vertex2f(si, tj));
+        }
+    }
+}
+double Modelo::distancia(_vertex3f a, _vertex3f b){
+    double x = pow((b.x-a.x), 2);
+    double y = pow((b.y-a.y), 2);
+    double z = pow((b.z-a.z), 2);
+    return sqrt((double)(x+y+z));
 }
