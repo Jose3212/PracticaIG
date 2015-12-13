@@ -24,9 +24,9 @@ Jerarquia dedos;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
-//ModeloPly ant("./data/ant.ply");
+ModeloPly ant("./data/ant.ply");
 //ModeloPly beethoven("./data/beethoven.ply");
-//ModeloPly big_dodge("./data/big_dodge.ply");
+ModeloPly big_dodge("./data/big_dodge.ply");
 //test1 perfil;
 //test2 perfil2;
 //test3 perfil3;
@@ -117,10 +117,10 @@ void draw_objects()
 {
 	switch(j){
 	case 0:
-		brazo.drawModel(i);
+		ant.drawNormales(i);
 		break;
 	case 1:
-		anular.drawModel(i);
+		big_dodge.drawNormales(i);
 		break;
 	case 2:
 		corazon.drawModel(i);
@@ -130,9 +130,12 @@ void draw_objects()
 		break;
 	case 4:
 		//beethoven.drawModel(i);
-		
-		//beethoven.drawNormales();
-		c1.dibujar_normales();
+		if(i==0){
+			glShadeModel(GL_FLAT);
+		}
+		else{glShadeModel(GL_SMOOTH);}
+		//beethoven.drawNormales(i);
+		//c1.dibujar_normales();
 		break;
 	case 5:
 		dedos.girar_munieca(i);
@@ -285,7 +288,7 @@ glutPostRedisplay();
 }
 
 void EnableLighting(void) {
-/*
+
 	GLfloat light_ambient[] = { .5, .5, .5, 1.0 };
 	GLfloat light_diffuse[] = { .9, .9, .9, 1.0 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -297,12 +300,12 @@ void EnableLighting(void) {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+/*
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-
+*/
 
 
 	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
@@ -313,7 +316,7 @@ void EnableLighting(void) {
 	glEnable(GL_LIGHT0);     // enable light 0
 	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
 	glShadeModel(GL_SMOOTH);
-*/
+
 }
 
 //***************************************************************************
@@ -402,8 +405,9 @@ menique.trasladar_figurax(2);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
-c1.generarBarrido();
-c1.mostrar_normales();
+ant.generarBarrido();
+big_dodge.generarBarrido();
+//beethoven.mostrar_normales();
 /*
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);
