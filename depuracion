@@ -1,0 +1,5 @@
+g++: error: src/jpg_imagen.cpp: No existe el archivo o el directorio
+g++: fatal error: no input files
+compilation terminated.
+make[1]: *** [src/jpg_imagen.cpp] Error 1
+make: *** [redo] Error 2

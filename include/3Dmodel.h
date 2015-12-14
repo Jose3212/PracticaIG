@@ -4,6 +4,8 @@
 #include <vector>
 #include "vertex.h"
 #include "math.h"
+#include "jpg_imagen.hpp"
+#include <string>
 class Modelo{
 private:
     _vertex3f rotar(_vertex3f p, double alpha);
@@ -11,12 +13,24 @@ private:
     double distancia(_vertex3f a,_vertex3f b);
 protected:
 	vector <_vertex3f> vertices;
+    jpg::Imagen * imagen;
+    GLuint ident_textura;
+    _vertex4f colore;
 	vector <_vertex3i> triangulos;
   vector <_vertex3f> normalesVert;
   vector <_vertex3f> normalesCara;
   vector <_vertex2f> texturas;
 
 public:
+    void set_colores(double r, double g, double b, double a){
+        colore._0=r;
+        colore._1=g;
+        colore._2=b;
+        colore._3=a;
+    }
+    void carga_textura(const string & ruta){
+        imagen = new jpg::Imagen(ruta);
+    }
     void trasladar_figurax(float traslacion);
     void trasladar_figuray(float traslacion);
     void rotar_z(double ang);

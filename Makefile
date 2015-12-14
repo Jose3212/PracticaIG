@@ -4,9 +4,11 @@
 #
 TARGETS= ./bin/practica
 
-SOURCES= src/practica.cc src/3Dmodel.cc src/dibujos.cc src/modeloPly.cc src/file_ply_stl.cc src/jerarquia.cc
+SOURCES= src/practica.cc src/3Dmodel.cc src/dibujos.cc src/modeloPly.cc src/file_ply_stl.cc src/jerarquia.cc src/jpg_imagen.cpp src/jpg_readwrite.cpp src/jpg_memsrc.cpp
 TEMP = src/*~ include/*~
 OBJECTS=	$(SOURCES:src/%.cc=obj/%.o)
+OBJETOS=	$(SOURCES:src/%.cpp=obj/%.o)
+OBJ=	obj/*
 DAT	=	data
 INCLUDE = include
 CARPETAS = include obj data bin src
@@ -21,7 +23,7 @@ DEPURACION=	-g -DXWINDOWS -DSHM -I/usr/include -I$(INCLUDE) -I.
 # Se indica directorios donde encontrar las funciontecas con -L. Usando -l seguido del
 # nombre se indica la funcionteca que se desea enlazar.
 #
-LDFLAGS=  -lGLU -lGL -lglut
+LDFLAGS=  -lGLU -lGL -lglut -ljpeg
 
 # definicion del compilador
 #
@@ -35,10 +37,14 @@ default :	$(CARPETAS) $(SOURCES) $(TARGETS)
 #
 $(CARPETAS):
 	mkdir -p $(CARPETAS)
-$(TARGETS) : $(OBJECTS)	
+$(OBJ):	$(OBJETOS) $(OBJECTS)
+$(TARGETS) : $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 $(OBJECTS) :
 	$(CC) $(CXXFLAGS) src/$(@F:.o=.cc) -o $@
+
+$(OBJETOS):
+	$(CC) $(CXXFLAGS) src/$(@F:.o=.cpp) -o $@
 
 .PHONY: depuracion
 depuracion :
@@ -54,7 +60,7 @@ programa:
 	$(TARGETS)
 redo:
 	rm -f $(TARGETS)
-	rm -f $(OBJECTS)
+	rm -f obj/*
 	make
 
 #

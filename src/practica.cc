@@ -29,8 +29,8 @@ Tetraedro t1(5);
 ModeloPly peon1("./data/perfil.ply");
 ModeloPly peon2("./data/perfil.ply");
 ModeloPly peon3("./data/perfil.ply");
-ModeloPly lata_cue("./data/lata-psup.ply");
-ModeloPly lata_sup("./data/lata-pcue.ply");
+ModeloPly lata_cue("./data/lata-pcue.ply");
+ModeloPly lata_sup("./data/lata-psup.ply");
 ModeloPly lata_inf("./data/lata-pinf.ply");
 //test1 perfil;
 //test2 perfil2;
@@ -93,6 +93,7 @@ glRotatef(Observer_angle_y,0,1,0);
 }
 
 void cambiaLuz(){
+	/*
 	cout << "Alfa: " << light_alpha << ", Beta: " << light_beta << endl;	
 	GLfloat _light_position[4];
 	GLfloat _spotlight_direction[3];
@@ -122,6 +123,7 @@ void cambiaLuz(){
     glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 10.0);
     glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
     glLightfv(GL_LIGHT1,GL_SPOT_DIRECTION,_spotlight_direction);
+    */
 
 }
 //**************************************************************************
@@ -279,7 +281,6 @@ void EnableLighting(void) {
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
 
-
 	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
 
@@ -379,6 +380,10 @@ ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
 
+peon1.set_colores(0.0, 0.0, 1.0, 1.0);
+peon2.set_colores(0.0, 1.0, 0.0, 1.0);
+lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
+lata_inf.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_cue.generarRevolucion(0,360);
 lata_sup.generarRevolucion(0,360);
 lata_inf.generarRevolucion(0,360);
@@ -397,6 +402,8 @@ lata_cue.generarBarrido();
 peon1.generarBarrido();
 peon2.generarBarrido();
 peon3.generarBarrido();
+peon3.carga_textura("./data/text-madera.jpg");
+lata_cue.carga_textura("./data/text-lata-1.jpg");
 /*
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);

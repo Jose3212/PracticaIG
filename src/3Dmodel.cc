@@ -183,9 +183,30 @@ void Modelo::drawNormales(int i){
 	float t = 5;
 	int v1,v2,v3;
 	float x=0,y=0,z=0;
+	//glColor3f(colore._0,colore._1,colore._2);
+	    if (imagen != NULL)
+    {
+        // Carga la imagen
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, imagen->tamX(), imagen->tamY(), 0, GL_RGB, GL_UNSIGNED_BYTE, imagen->leerPixels());
+
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_COLOR_MATERIAL);
+    }
+    else
+    {
+        glEnable(GL_COLOR_MATERIAL);
+        glDisable(GL_TEXTURE_2D);
+    }
+
 	if(i==0){
 		glBegin(GL_TRIANGLES);
 		for(int j =0; j < triangulos.size();j++){
+			glColor3f(colore._0,colore._1,colore._2);
 			glNormal3f(normalesCara.at(j).x,normalesCara.at(j).y,normalesCara.at(j).z);
 			v1 = triangulos.at(j)._0;
 			v2 = triangulos.at(j)._1;
@@ -199,15 +220,34 @@ void Modelo::drawNormales(int i){
 	else{
 		glBegin(GL_TRIANGLES);
 		for(int j =0; j < triangulos.size();j++){
+			glColor3f(colore._0,colore._1,colore._2);
 			v1 = triangulos.at(j)._0;
 			v2 = triangulos.at(j)._1;
 			v3 = triangulos.at(j)._2;
-			glNormal3f(normalesCara.at(v1).x,normalesCara.at(v1).y,normalesCara.at(v1).z);
-			glVertex3f(vertices.at(v1).x, vertices.at(v1).y,vertices.at(v1).z);
-			glNormal3f(normalesCara.at(v2).x,normalesCara.at(v2).y,normalesCara.at(v2).z);
-			glVertex3f(vertices.at(v2).x, vertices.at(v2).y,vertices.at(v2).z);
-			glNormal3f(normalesCara.at(v3).x,normalesCara.at(v3).y,normalesCara.at(v3).z);
-			glVertex3f(vertices.at(v3).x, vertices.at(v3).y,vertices.at(v3).z);
+			if (texturas.size() > 0)
+                glTexCoord2f(texturas[v1].x, texturas[v1].y);
+
+            if (normalesCara.size() > 0)
+                glNormal3f(normalesCara[v1].x, normalesCara[v1].y, normalesCara[v1].z);
+
+
+            glVertex3f(vertices[v1].x, vertices[v1].y, vertices[v1].z);
+
+            if (texturas.size() > 0)
+                 glTexCoord2f(texturas[v2].x, texturas[v2].y);
+
+            if (normalesCara.size() > 0)
+                glNormal3f(normalesCara[v2].x, normalesCara[v2].y, normalesCara[v2].z);
+
+            glVertex3f(vertices[v2].x, vertices[v2].y, vertices[v2].z);
+
+            if (texturas.size() > 0)
+                glTexCoord2f(texturas[v3].x, texturas[v3].y);
+
+            if (normalesCara.size() > 0)
+                glNormal3f(normalesCara[v3].x, normalesCara[v3].y, normalesCara[v3].z);
+
+            glVertex3f(vertices[v3].x, vertices[v3].y, vertices[v3].z);
 		}
 		glEnd();
 	}
