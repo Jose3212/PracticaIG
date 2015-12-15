@@ -184,8 +184,10 @@ void Modelo::drawNormales(int i){
 	int v1,v2,v3;
 	float x=0,y=0,z=0;
 	//glColor3f(colore._0,colore._1,colore._2);
-	    if (imagen != NULL)
-    {
+	if (peon){
+		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,m1.diffuse);
+	}
+	if (imagen != NULL){
         // Carga la imagen
         glTexImage2D(GL_TEXTURE_2D, 0, 3, imagen->tamX(), imagen->tamY(), 0, GL_RGB, GL_UNSIGNED_BYTE, imagen->leerPixels());
 
@@ -197,8 +199,7 @@ void Modelo::drawNormales(int i){
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_COLOR_MATERIAL);
     }
-    else
-    {
+    else{
         glEnable(GL_COLOR_MATERIAL);
         glDisable(GL_TEXTURE_2D);
     }

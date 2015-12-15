@@ -94,37 +94,23 @@ glRotatef(Observer_angle_y,0,1,0);
 }
 
 void cambiaLuz(){
-	/*
 	cout << "Alfa: " << light_alpha << ", Beta: " << light_beta << endl;	
-	GLfloat _light_position[4];
-	GLfloat _spotlight_direction[3];
-
-    GLfloat light_ambient[] = { 1.0, 0.0, 0.0, 1.0 };
-	GLfloat light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	_light_position[0] =  0.0;
-	_light_position[1] = 1.0;
-	_light_position[2] = 0.0;
-	_light_position[3] = 0.0;
-
-	_spotlight_direction[0] = light_alpha;
-	_spotlight_direction[1] = light_beta;
-	_spotlight_direction[2] = 0.0;
-
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-
-	glDisable(GL_LIGHT0);
-
-    glEnable(GL_LIGHT1);
-    glLightfv(GL_LIGHT1, GL_POSITION, _light_position);
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 10.0);
-    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
-    glLightfv(GL_LIGHT1,GL_SPOT_DIRECTION,_spotlight_direction);
-    */
+	GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
+	GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
+	GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
+	GLfloat light_position[]={1.0, 1.0, 1.0, 0.0};
+	GLfloat spotlight[]={light_alpha,light_beta,1.0};
+	GLfloat angulo[] = {45};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotlight);
+	glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF,angulo);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_SMOOTH);
+	glShadeModel(GL_SMOOTH);
 
 }
 //**************************************************************************
@@ -242,6 +228,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 					glDisable(GL_LIGHTING);
 					luz = false;
 				}
+			draw_objects();
 		}
 	//Pintamos de nuevo
 	glutPostRedisplay();
@@ -273,33 +260,24 @@ glutPostRedisplay();
 
 void EnableLighting(void) {
 
-
-	GLfloat light_ambient[] = { .5, .5, .5, 1.0 };
-	GLfloat light_diffuse[] = { .9, .9, .9, 1.0 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 20.0, 10.0, 30.0, 1.0 };
+GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
+GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
+GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
+GLfloat light_position[]={1.0, 1.0, 1.0, 1.0};
 	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
 	float shininess = 20;
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-
-	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
-
-	glEnable(GL_SMOOTH);     // enable smooth shading
-	glEnable(GL_LIGHTING);   // enable lighting
-	glEnable(GL_LIGHT0);     // enable light 0
-	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
-	glShadeModel(GL_SMOOTH);
-
+glEnable(GL_LIGHTING);
+glEnable(GL_LIGHT0);
+glEnable(GL_SMOOTH);
+glShadeModel(GL_SMOOTH);
 
 }
 
@@ -389,11 +367,11 @@ menique.trasladar_figurax(2);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
-
-peon1.set_colores(1.0, 1.0, 1.0, 1.0);
-peon2.set_colores(0.0, 0.0, 0.0, 1.0);
-peon3.set_colores(1,1,1,1);
-lata_cue.set_colores(1,1,1,1);
+peon1.peon = true;
+peon1.set_colores(0.0, 0.0, 0.0, 1.0);
+peon2.set_colores(1.0, 1.0,1.0, 1.0);
+peon3.set_colores(1.0,1.0,1.0,1.0);
+lata_cue.set_colores(1.0,1.0,1.0,1.0);
 lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_inf.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_cue.generarRevolucion(0,360);
@@ -405,6 +383,12 @@ peon3.generarRevolucion(0,360);
 lata_cue.escalar(5);
 lata_sup.escalar(5);
 lata_inf.escalar(5);
+lata_cue.rotar_z(180);
+lata_sup.rotar_z(180);
+lata_inf.rotar_z(180);
+lata_cue.trasladar_figuray(2);
+lata_sup.trasladar_figuray(2);
+lata_inf.trasladar_figuray(2);
 peon1.trasladar_figurax(5);
 peon2.trasladar_figurax(-5);
 peon3.trasladar_figurax(2.5);

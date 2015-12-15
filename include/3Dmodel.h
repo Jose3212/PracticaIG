@@ -22,6 +22,11 @@ protected:
   vector <_vertex2f> texturas;
 
 public:
+    struct material{
+        GLfloat diffuse[4]={0, 0, 0, 1.0};
+    };
+    bool peon;
+    material m1;
     void set_colores(double r, double g, double b, double a){
         colore._0=r;
         colore._1=g;
