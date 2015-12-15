@@ -15,6 +15,7 @@ using namespace std;
 int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
+bool luz = true;
 Brazo brazo;
 Palma palma;
 Dedo indice;
@@ -232,6 +233,15 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 			case 'O':
 				i=1;
 				break;
+			case 'L':
+				if(!luz){
+					glEnable(GL_LIGHTING);
+					luz = true;
+				}
+				else{
+					glDisable(GL_LIGHTING);
+					luz = false;
+				}
 		}
 	//Pintamos de nuevo
 	glutPostRedisplay();
@@ -263,6 +273,7 @@ glutPostRedisplay();
 
 void EnableLighting(void) {
 
+
 	GLfloat light_ambient[] = { .5, .5, .5, 1.0 };
 	GLfloat light_diffuse[] = { .9, .9, .9, 1.0 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -280,16 +291,15 @@ void EnableLighting(void) {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
-
 	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
-
 
 	glEnable(GL_SMOOTH);     // enable smooth shading
 	glEnable(GL_LIGHTING);   // enable lighting
 	glEnable(GL_LIGHT0);     // enable light 0
 	glEnable(GL_DEPTH_TEST);   //Activa el buffer de profundidad.
 	glShadeModel(GL_SMOOTH);
+
 
 }
 
@@ -380,8 +390,10 @@ ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
 
-peon1.set_colores(0.0, 0.0, 1.0, 1.0);
-peon2.set_colores(0.0, 1.0, 0.0, 1.0);
+peon1.set_colores(1.0, 1.0, 1.0, 1.0);
+peon2.set_colores(0.0, 0.0, 0.0, 1.0);
+peon3.set_colores(1,1,1,1);
+lata_cue.set_colores(1,1,1,1);
 lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_inf.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_cue.generarRevolucion(0,360);
