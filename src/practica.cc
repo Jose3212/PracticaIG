@@ -100,15 +100,17 @@ void cambiaLuz(){
 	GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
 	GLfloat light_position[]={1.0, 1.0, 1.0, 0.0};
 	GLfloat spotlight[]={light_alpha,light_beta,1.0};
-	GLfloat angulo[] = {45};
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotlight);
-	glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF,angulo);
+	//GLfloat angulo[] = {90};
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotlight);
+	//glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF,angulo);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glDisable(GL_LIGHT0);
+	glDisable(GL_LIGHT2);
 	glEnable(GL_SMOOTH);
 	glShadeModel(GL_SMOOTH);
 
@@ -228,6 +230,10 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 					glDisable(GL_LIGHTING);
 					luz = false;
 				}
+				break;
+			case 'M':
+				glEnable(GL_LIGHT0);
+				break;
 			draw_objects();
 		}
 	//Pintamos de nuevo
@@ -264,8 +270,13 @@ GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
 GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
 GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
 GLfloat light_position[]={1.0, 1.0, 1.0, 1.0};
+GLfloat light_position1[]={1.0, 1.0, -1.0, 1.0};
 	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
 	float shininess = 20;
+glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient);
+glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse);
+glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular);
+glLightfv(GL_LIGHT2, GL_POSITION, light_position);
 glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -276,6 +287,7 @@ glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 glEnable(GL_LIGHTING);
 glEnable(GL_LIGHT0);
+glEnable(GL_LIGHT2);
 glEnable(GL_SMOOTH);
 glShadeModel(GL_SMOOTH);
 
@@ -367,6 +379,7 @@ menique.trasladar_figurax(2);
 ant.trasladar_figurax(2);
 ant.trasladar_figuray(8.5);
 */
+
 peon1.peon = true;
 peon1.set_colores(0.0, 0.0, 0.0, 1.0);
 peon2.set_colores(1.0, 1.0,1.0, 1.0);
@@ -374,6 +387,7 @@ peon3.set_colores(1.0,1.0,1.0,1.0);
 lata_cue.set_colores(1.0,1.0,1.0,1.0);
 lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
 lata_inf.set_colores(0.184314, 0.309804, 0.309804, 1.0);
+
 lata_cue.generarRevolucion(0,360);
 lata_sup.generarRevolucion(0,360);
 lata_inf.generarRevolucion(0,360);
