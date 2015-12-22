@@ -11,6 +11,7 @@
 #include "modeloPly.hpp"
 #include "dibujos.h"
 #include "jerarquia.hpp"
+#include "material.hpp"
 using namespace std;
 int i,j;
 float light_alpha = 0.0;
@@ -24,6 +25,7 @@ Dedo corazon;
 Dedo menique;
 Dedo pulgar;
 Jerarquia dedos;
+Material m1;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
@@ -33,6 +35,7 @@ ModeloPly peon3("./data/perfil.ply");
 ModeloPly lata_cue("./data/lata-pcue.ply");
 ModeloPly lata_sup("./data/lata-psup.ply");
 ModeloPly lata_inf("./data/lata-pinf.ply");
+Modelo esfera;
 //test1 perfil;
 //test2 perfil2;
 //test3 perfil3;
@@ -98,14 +101,13 @@ void cambiaLuz(){
 	GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
 	GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
 	GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
-	GLfloat light_position[]={1.0, 1.0, 1.0, 0.0};
+	GLfloat light_position[]={light_alpha, 3.0, light_beta, 0.0};
 	GLfloat spotlight[]={light_alpha,light_beta,1.0};
 	//GLfloat angulo[] = {90};
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotlight);
 	//glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF,angulo);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT1);
@@ -143,12 +145,30 @@ glEnd();
 
 void draw_objects()
 {
-	peon1.drawNormales(i);
-	peon2.drawNormales(i);
-	peon3.drawNormales(i);
-	lata_cue.drawNormales(i);
-	lata_sup.drawNormales(i);
-	lata_inf.drawNormales(i);
+	//esfera.drawNormales(i);
+	switch (i){
+		case 0:
+			m1.material_difuso();
+			break;
+		case 1:
+			m1.material_m1();
+			break;
+		case 2:
+			m1.material_azul();
+			break;
+		case 3:
+			m1.material_m();
+	}
+/*
+	peon1.drawNormales(1);
+
+	peon2.drawNormales(1);
+	peon3.drawNormales(1);
+	lata_cue.drawNormales(1);
+	lata_sup.drawNormales(1);
+	lata_inf.drawNormales(1);
+	*/
+esfera.drawNormales(1);
 }
 
 
@@ -200,26 +220,32 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 		switch (toupper(Tecla1)){
 			
 			case 'A': // aumentar el valor de β
-				light_beta +=0.1;
+				light_beta +=1;
 				cambiaLuz();
 				break;
 			case 'Z': // disminuir el valor de β
-				light_beta-=0.1;
+				light_beta-=1;
 				cambiaLuz();
 				break;
 			case 'X': // aumentar el valor de α
-				light_alpha+=0.1;
+				light_alpha+=1;
 				cambiaLuz();
 				break;
 			case 'C': // disminuir el valor de α
-				light_alpha-=0.1;
+				light_alpha-=1;
 				cambiaLuz();
 				break;
-			case 'P':
+			case '1':
 				i=0;
 				break;
-			case 'O':
+			case '2':
 				i=1;
+				break;
+			case '3':
+				i=2;
+				break;
+			case '4':
+				i=3;
 				break;
 			case 'L':
 				if(!luz){
@@ -233,6 +259,12 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 				break;
 			case 'M':
 				glEnable(GL_LIGHT0);
+				break;
+			case 'T':
+				esfera.carga_textura("./data/text-madera.jpg");
+				break;
+			case 'E':
+				esfera.quita_textura();
 				break;
 			draw_objects();
 		}
@@ -273,18 +305,26 @@ GLfloat light_position[]={1.0, 1.0, 1.0, 1.0};
 GLfloat light_position1[]={1.0, 1.0, -1.0, 1.0};
 	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
 	float shininess = 20;
-glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient);
-glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse);
-glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular);
-glLightfv(GL_LIGHT2, GL_POSITION, light_position);
+GLfloat light_ambient1[]={0.3, 0.3, 0.3, 1.0};
+GLfloat light_diffuse1[]={0, 1.0, 1.0, 1.0};
+GLfloat light_specular1[]={1.0, 1.0, 0, 1.0};
+//GLfloat light_position1[]={1.0, 1.0, 1.0, 1.0};
+/*glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient1);
+glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse1);
+glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular1);
+glLightfv(GL_LIGHT2, GL_POSITION, light_position1);*/
 glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+/*
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+	*/
+	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
 glEnable(GL_LIGHTING);
 glEnable(GL_LIGHT0);
 glEnable(GL_LIGHT2);
@@ -381,8 +421,9 @@ ant.trasladar_figuray(8.5);
 */
 
 peon1.peon = true;
-peon1.set_colores(0.0, 0.0, 0.0, 1.0);
+/*peon1.set_colores(0.0, 0.0, 0.0, 1.0);
 peon2.set_colores(1.0, 1.0,1.0, 1.0);
+*/
 peon3.set_colores(1.0,1.0,1.0,1.0);
 lata_cue.set_colores(1.0,1.0,1.0,1.0);
 lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
@@ -414,6 +455,12 @@ peon2.generarBarrido();
 peon3.generarBarrido();
 peon3.carga_textura("./data/text-madera.jpg");
 lata_cue.carga_textura("./data/text-lata-1.jpg");
+
+esfera.esfera(20,3);
+esfera.generarBarrido();
+//esfera.set_colores(1.0,1.0,1.0,1.0);
+//esfera.carga_textura("./data/text-madera.jpg");
+
 /*
 dedos.aniade_figura(pulgar);
 dedos.aniade_figura(indice);

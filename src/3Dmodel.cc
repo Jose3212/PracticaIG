@@ -178,6 +178,22 @@ void Modelo::dibujar_normales(){
 void Modelo::mostrar_normales(){
 	for(int i = 0; i< normalesCara.size(); i++)cout<< " " << normalesCara.at(i).x << " - " << normalesCara.at(i).y << " - " << normalesCara.at(i).z << endl;
 }
+void Modelo::esfera(int lados, float rad){
+	vertices.push_back(_vertex3f(0,rad,0));
+	float x=0.01;
+  for (int i = 0; i < 200; i++){
+	vertices.push_back(_vertex3f(x,rad,0));
+	if(x<1)x+=0.01;
+	else
+	x-=0.01;
+  }
+  //creamos la esfera rotando el perfil a través del eje Z
+  generarRevolucion(0, 360);
+
+
+
+
+}
 void Modelo::drawNormales(int i){
 	GLenum dibujo;
 	float t = 5;

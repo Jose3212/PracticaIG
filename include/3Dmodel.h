@@ -27,6 +27,10 @@ public:
     };
     bool peon;
     material m1;
+    void esfera(int lados, float rad);
+    void quita_textura(){
+        imagen = NULL;
+    }
     void set_colores(double r, double g, double b, double a){
         colore._0=r;
         colore._1=g;
