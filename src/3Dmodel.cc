@@ -182,7 +182,7 @@ void Modelo::esfera(int lados, float rad){
 	vertices.push_back(_vertex3f(0,rad,0));
 	float x=0.01;
   for (int i = 0; i < 200; i++){
-	vertices.push_back(_vertex3f(x,rad,0));
+	vertices.push_back(_vertex3f(x,rad-x,0));
 	if(x<1)x+=0.01;
 	else
 	x-=0.01;
@@ -200,9 +200,6 @@ void Modelo::drawNormales(int i){
 	int v1,v2,v3;
 	float x=0,y=0,z=0;
 	//glColor3f(colore._0,colore._1,colore._2);
-	if (peon){
-		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,m1.diffuse);
-	}
 	if (imagen != NULL){
         // Carga la imagen
         glTexImage2D(GL_TEXTURE_2D, 0, 3, imagen->tamX(), imagen->tamY(), 0, GL_RGB, GL_UNSIGNED_BYTE, imagen->leerPixels());

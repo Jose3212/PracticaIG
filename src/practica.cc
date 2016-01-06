@@ -16,7 +16,46 @@ using namespace std;
 int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
-bool luz = true;
+bool textura = false;
+jpg::Imagen * Textura;
+
+
+
+GLuint loadTexture(jpg::Imagen* image) {
+
+  GLuint textureId;
+
+  glGenTextures(1, &textureId); //Make room for our texture
+
+  glBindTexture(GL_TEXTURE_2D, textureId); //Tell OpenGL which texture to edit
+
+  //Map the image to the texture
+
+  glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
+
+         0,                            //0 for now
+
+         GL_RGB,                       //Format OpenGL uses for image
+
+         image->tamX(), image->tamY(),  //Width and height
+
+         0,                            //The border of the image
+
+         GL_RGB, //GL_RGB, because pixels are stored in RGB format
+
+         GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
+
+                           //as unsigned numbers
+
+         image->leerPixels());               //The actual pixel data
+
+  return textureId; //Returns the id of the texture
+
+}
+GLuint _textureId;
+
+
+/*
 Brazo brazo;
 Palma palma;
 Dedo indice;
@@ -25,10 +64,14 @@ Dedo corazon;
 Dedo menique;
 Dedo pulgar;
 Jerarquia dedos;
+*/
 Material m1;
+GLUquadric  *quadObj;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
+
+
 ModeloPly peon1("./data/perfil.ply");
 ModeloPly peon2("./data/perfil.ply");
 ModeloPly peon3("./data/perfil.ply");
@@ -99,10 +142,10 @@ glRotatef(Observer_angle_y,0,1,0);
 void cambiaLuz(){
 	cout << "Alfa: " << light_alpha << ", Beta: " << light_beta << endl;	
 	GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
-	GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
+	GLfloat light_diffuse[]={0.5, 0.5, 0.5, 1.0};
 	GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
-	GLfloat light_position[]={light_alpha, 3.0, light_beta, 0.0};
-	GLfloat spotlight[]={light_alpha,light_beta,1.0};
+	GLfloat light_position[]={light_alpha, 5.0, light_beta, 0.0};
+	//GLfloat spotlight[]={light_alpha,light_beta,1.0};
 	//GLfloat angulo[] = {90};
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
@@ -151,13 +194,13 @@ void draw_objects()
 			m1.material_difuso();
 			break;
 		case 1:
-			m1.material_m1();
+			m1.material_no_difuso();
 			break;
 		case 2:
-			m1.material_azul();
+			m1.material_metal();
 			break;
 		case 3:
-			m1.material_m();
+			m1.material_azul();
 	}
 /*
 	peon1.drawNormales(1);
@@ -168,7 +211,27 @@ void draw_objects()
 	lata_sup.drawNormales(1);
 	lata_inf.drawNormales(1);
 	*/
-esfera.drawNormales(1);
+if(textura == true){
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  //glRotatef(90,1.0f,0.0f,0.0f);
+
+  //glRotatef(rotate,0.0f,0.0f,1.0f);
+
+  gluQuadricTexture(quadObj,1);
+}
+else{
+	glDisable(GL_TEXTURE_2D);
+}
+gluSphere (quadObj, 5, 40, 40);
 }
 
 
@@ -248,13 +311,11 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 				i=3;
 				break;
 			case 'L':
-				if(!luz){
-					glEnable(GL_LIGHTING);
-					luz = true;
+				if(!textura){
+					textura = true;
 				}
 				else{
-					glDisable(GL_LIGHTING);
-					luz = false;
+					textura = false;
 				}
 				break;
 			case 'M':
@@ -299,9 +360,9 @@ glutPostRedisplay();
 void EnableLighting(void) {
 
 GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
-GLfloat light_diffuse[]={1.0, 1.0, 1.0, 1.0};
+GLfloat light_diffuse[]={0.5, 0.5, 0.5, 1.0};
 GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
-GLfloat light_position[]={1.0, 1.0, 1.0, 1.0};
+GLfloat light_position[]={10.0, 5.0, 5.0, 1.0};
 GLfloat light_position1[]={1.0, 1.0, -1.0, 1.0};
 	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
 	float shininess = 20;
@@ -323,11 +384,12 @@ glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matSpecular);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	*/
-	GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
+	/*GLfloat emision[] = {0.3, 0.3, 0.3, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emision);
+	*/
 glEnable(GL_LIGHTING);
 glEnable(GL_LIGHT0);
-glEnable(GL_LIGHT2);
+//glEnable(GL_LIGHT2);
 glEnable(GL_SMOOTH);
 glShadeModel(GL_SMOOTH);
 
@@ -397,7 +459,10 @@ glutInitWindowSize(UI_window_width,UI_window_height);
 // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 // al bucle de eventos)
 glutCreateWindow("Practica");
+Textura = new jpg::Imagen("./data/text-madera.jpg");
+_textureId = loadTexture(Textura);
 
+delete Textura;
 /*
 pulgar.generarRevolucion(0,360);
 indice.generarRevolucion(0,360);
@@ -424,6 +489,7 @@ peon1.peon = true;
 /*peon1.set_colores(0.0, 0.0, 0.0, 1.0);
 peon2.set_colores(1.0, 1.0,1.0, 1.0);
 */
+/*
 peon3.set_colores(1.0,1.0,1.0,1.0);
 lata_cue.set_colores(1.0,1.0,1.0,1.0);
 lata_sup.set_colores(0.184314, 0.309804, 0.309804, 1.0);
@@ -455,9 +521,12 @@ peon2.generarBarrido();
 peon3.generarBarrido();
 peon3.carga_textura("./data/text-madera.jpg");
 lata_cue.carga_textura("./data/text-lata-1.jpg");
-
+*/
 esfera.esfera(20,3);
-esfera.generarBarrido();
+quadObj = gluNewQuadric();
+gluQuadricTexture(quadObj, GL_TRUE);
+
+//esfera.generarBarrido();
 //esfera.set_colores(1.0,1.0,1.0,1.0);
 //esfera.carga_textura("./data/text-madera.jpg");
 
