@@ -331,7 +331,7 @@ void DisableFocos(void){
 }
 void rotar_foco(bool direc, int foco){
 	GLfloat position[4];
-	position[3]={1.0};
+	position[3]={0.0};
 	
 	switch (foco){
 		case 1:
