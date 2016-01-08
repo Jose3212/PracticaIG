@@ -686,7 +686,7 @@ esfera.esfera(20,3);
 quadObj = gluNewQuadric();
 gluQuadricTexture(quadObj, GL_TRUE);
 c.initialize(5,5);
-c.cargarTextura("./data/text-madera.jpg");
+c.cargarTextura("./data/SinNombre.jpg");
 //esfera.generarBarrido();
 //esfera.set_colores(1.0,1.0,1.0,1.0);
 //esfera.carga_textura("./data/text-madera.jpg");

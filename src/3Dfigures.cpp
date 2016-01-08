@@ -518,7 +518,6 @@ void figura3D::draw( char modo){
   else
   {
     //	cout << "Desactiva textura" <<endl;
-    glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_TEXTURE_2D);
   }
 
