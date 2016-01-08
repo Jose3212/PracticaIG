@@ -450,6 +450,10 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 			case 'T':
 				if(!textura){
 					textura = true;
+					Textura = new jpg::Imagen("./data/text-madera.jpg");
+					_textureId = loadTexture(Textura);
+
+					delete Textura;
 				}
 				else{
 					textura = false;
