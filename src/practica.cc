@@ -303,6 +303,8 @@ glutPostRedisplay();
 //***************************************************************************
 void EnableFocos(void){
 	glDisable(GL_LIGHT0);
+	glDisable(GL_LIGHT2);
+	glDisable(GL_LIGHT1);
 	
 	glLightfv(GL_LIGHT3, GL_AMBIENT, light_ambient2);
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, light_diffuse2);
