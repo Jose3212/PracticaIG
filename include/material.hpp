@@ -36,7 +36,7 @@ struct Material{
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, light_diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, light_diffuse1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, light_diffuse2);
-        	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 20);
+        	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
     }
     void material_m(){
         GLfloat light_diffuse[]={0.0, 0.0, 0.0, 0.0};

@@ -492,18 +492,8 @@ void figura3D::revolucionar(char eje_rotador, int lados, bool tapa){
 
 }
 
-
-
-
-void figura3D::draw( char modo){
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //      	if(nvertices.size() > 0)
-  //              drawNormales();
-  //posible resultado similar por defecto
-  //  glShadeModel(GL_SMOOTH);
-  if (pimg != NULL)
-  {
-    //	cout << "Dibuja textura" <<endl;
+void figura3D::activarTexturas(){
+      //	cout << "Dibuja textura" <<endl;
     glTexImage2D(GL_TEXTURE_2D, 0, 3, tamx, tamy, 0, GL_RGB, GL_UNSIGNED_BYTE, texels);
     //-
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -514,6 +504,18 @@ void figura3D::draw( char modo){
 
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_COLOR_MATERIAL);
+}
+
+
+void figura3D::draw( char modo){
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //      	if(nvertices.size() > 0)
+  //              drawNormales();
+  //posible resultado similar por defecto
+  //  glShadeModel(GL_SMOOTH);
+  if (pimg != NULL)
+  {
+  activarTexturas();
   }
   else
   {

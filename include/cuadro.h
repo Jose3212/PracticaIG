@@ -14,10 +14,13 @@ public:
   void aplicarTextura();
   void dsolido();
   void dtextura();
+  void colocar_texturaExamen(int lados, int vperfil);
   void dbordes();
   void dibujarCaras(int principio, int final,bool hay_normales,int  &indiceT);
+  void dibujarCarasExam(int principio, int final,bool hay_normales,int  &indiceT);
   void colocar_textura(int x, int y);
   void dibujar(char mode);
 };
+
 #endif	
 

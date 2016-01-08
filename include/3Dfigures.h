@@ -67,6 +67,7 @@ public:
 
   void changeColor(float RR, float GG, float BB);
 
+void activarTexturas();
   vector<_vertex3f> getVertices();
   vector <cara> getCaras();
   void escalar(float es);

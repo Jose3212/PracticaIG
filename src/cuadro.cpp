@@ -1,11 +1,11 @@
 #include "cuadro.h"
 
-void cuadro::aplicarTextura(){
-  if(pimg != NULL){
 
-  }
 
-}
+void cuadro::colocar_texturaExamen(int lados, int vperfil){
+
+
+};
 
 void cuadro::initialize(int xx, int yy){
   alto = yy;
@@ -214,53 +214,58 @@ void cuadro::dbordes(){
 
   int indice =alto*2+2;
   glBegin(GL_TRIANGLES);   
-  for (int i=0;i<caras.size();i++){
-    if(i == indice && i != caras.size() -alto*2+2){ 
-      i=i+alto*2-5;
-      indice+=alto*2;
-    }
-    else{
+  for (int i=4;i<caras.size();i++){
+    //    if(i == indice && i != caras.size() -alto*2+2){ 
+    //      i=i+alto*2-5;
+    //      indice+=alto*2;
+    //    }
+    //    else{
+    if( i < 8 ||  i > 11){
       if(i % 2 == 0)
         glColor3f(0,0,0);
       else
         glColor3f(1,1,1);
-
+      //      glNormal3f(nvertices[posv1].x, nvertices[posv1].y, nvertices[posv1].z);
       glVertex3fv((GLfloat *) &(vertices[caras[i].x]));
       glVertex3fv((GLfloat *) &(vertices[caras[i].y]));
       glVertex3fv((GLfloat *) &(vertices[caras[i].z]));
     }
+    //    }
   }
   glEnd();
 
 };
 void cuadro::dtextura(){
-  glTexImage2D(GL_TEXTURE_2D, 0, 3, tamx, tamy, 0, GL_RGB, GL_UNSIGNED_BYTE, texels);
-  glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-  glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-  glEnable(GL_TEXTURE_2D);
-  glDisable(GL_COLOR_MATERIAL);
+  activarTexturas();
+
   glColor3f(R,G,B);
   glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
   glBegin(GL_TRIANGLES);   
 
 
+  //  bool hay_normales=nvertices.size();
+  //  int indice = alto+2;
+  //  int indiceT=0;
+  //  int pintada = alto-2;
+  //  int auxi = 0;
+
+  //  for(int i = 0; i < vtexturas.size(); i++)
+
+  //    for(int i = indice; auxi < ancho-2; auxi++, i=i+indice-1){
+
+  //      dibujarCarasExam(i,i+pintada,hay_normales,indiceT);
+  //      indiceT++;
+  //    }
+
   bool hay_normales=nvertices.size();
-
-
-
-  int indice = alto+2;
+  int indice = 0;
   int indiceT=0;
-  int pintada = alto-2;
-
+  int pintada = 2;
   int auxi = 0;
   for(int i = 0; i < vtexturas.size(); i++)
 
-    //////////////////////////////////////////////////////////el limit hay que cambiarlo
-    for(int i = indice; auxi < ancho-2; auxi++, i=i+indice-1){
-
-      dibujarCaras(i,i+pintada,hay_normales,indiceT);
+    for(int i = indice; auxi < 2; auxi++, i=i+5){
+      dibujarCarasExam(i,i+pintada,hay_normales,indiceT);
       indiceT++;
     }
 
@@ -320,6 +325,63 @@ void cuadro::dibujarCaras(int principio, int final, bool hay_normales, int & ind
     indiceT++;
   }
 }
+
+void cuadro::dibujarCarasExam(int principio, int final, bool hay_normales, int & indiceT){
+  for (int i=final-1;i>principio-1;i--){
+
+    int posv1=i;//6
+    int posv2=posv1+1;//7
+    int posv3=posv2+alto;//11
+    int posv4=posv3+1;//12
+    ///////
+    //Pintamos una cara del cuadrado
+    ///////
+    glTexCoord2f(vtexturas[indiceT+1].x, vtexturas[indiceT+1].y); 
+    if (hay_normales)
+      glNormal3f(nvertices[posv1].x, nvertices[posv1].y, nvertices[posv1].z);
+    //pintamos v1_      
+    glVertex3f(vertices[posv1].x, vertices[posv1].y, vertices[posv1].z);
+
+    glTexCoord2f(vtexturas[indiceT].x, vtexturas[indiceT].y); 
+    if (hay_normales)
+      glNormal3f(nvertices[posv2].x, nvertices[posv2].y, nvertices[posv2].z);
+    //pintamos v2_
+    glVertex3f(vertices[posv2].x, vertices[posv2].y, vertices[posv2].z);
+
+    glTexCoord2f(vtexturas[indiceT+alto].x, vtexturas[indiceT+alto].y);
+    if (hay_normales)
+      glNormal3f(nvertices[posv3].x, nvertices[posv3].y, nvertices[posv3].z);
+    //pintamos v3            
+    glVertex3f(vertices[posv3].x, vertices[posv3].y, vertices[posv3].z);
+    ///////
+    //Pintamos la otra cara del cuadrado
+    ///////
+
+    glTexCoord2f(vtexturas[indiceT+alto].x, vtexturas[indiceT+alto].y);
+    if (hay_normales)
+      glNormal3f(nvertices[posv3].x, nvertices[posv3].y, nvertices[posv3].z);
+    //pintamos v3            
+    glVertex3f(vertices[posv3].x, vertices[posv3].y, vertices[posv3].z);
+
+    glTexCoord2f(vtexturas[indiceT].x, vtexturas[indiceT].y); 
+    if (hay_normales)
+      glNormal3f(nvertices[posv2].x, nvertices[posv2].y, nvertices[posv2].z);
+    //pintamos v2_      
+    glVertex3f(vertices[posv2].x, vertices[posv2].y, vertices[posv2].z);
+
+    glTexCoord2f(vtexturas[indiceT+alto-1].x, vtexturas[indiceT+alto-1].y); 
+    if (hay_normales)
+      glNormal3f(nvertices[posv4].x, nvertices[posv4].y, nvertices[posv4].z);
+    //pintamos v4_
+    glVertex3f(vertices[posv4].x, vertices[posv4].y, vertices[posv4].z);
+    indiceT++;
+  }
+}
+
+
+
+
+
 
 
 
