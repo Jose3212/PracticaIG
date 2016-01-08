@@ -12,15 +12,32 @@
 #include "dibujos.h"
 #include "jerarquia.hpp"
 #include "material.hpp"
+#include "cuadro.h"
 using namespace std;
 int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
 bool textura = false;
+double angle=0.1;
 jpg::Imagen * Textura;
-
-
-
+bool luz = false;
+bool focos = false;
+int foco;
+cuadro c;
+double eje_x[4]={0,0,0,0}, eje_y[4]={0,0,0,0};
+	GLfloat light_ambient2[]={0.0, 0.0, 0.3, 1.0};
+	GLfloat light_diffuse2[]={0.0, 0.0, 0.0, 1.0};
+	GLfloat light_specular2[]={0.0, 0.0, 1.0, 1.0};
+	GLfloat light_position2[]={5.0, 5.0, 5.0, 1.0};
+	GLfloat light_ambient3[]={0.3, 0.0, 0.0, 1.0};
+	GLfloat light_diffuse3[]={0.5, 0.0, 0.0, 1.0};
+	GLfloat light_specular3[]={1.0, 0.0, 0.0, 1.0};
+	GLfloat light_position3[]={-5.0, 5.0, 5.0, 1.0};
+	GLfloat light_ambient4[]={0.0, 0.3, 0.0, 1.0};
+	GLfloat light_diffuse4[]={0.0, 0.5, 0.0, 1.0};
+	GLfloat light_specular4[]={0.0, 1.0, 0.0, 1.0};
+	GLfloat light_position4[]={0.0, 5.0, -5.0, 1.0};
+	GLfloat angulo[] = {180};
 GLuint loadTexture(jpg::Imagen* image) {
 
   GLuint textureId;
@@ -146,7 +163,7 @@ void cambiaLuz(){
 	GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
 	GLfloat light_position[]={light_alpha, 5.0, light_beta, 0.0};
 	//GLfloat spotlight[]={light_alpha,light_beta,1.0};
-	//GLfloat angulo[] = {90};
+	//GLfloat angulo[] = {45};
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
@@ -202,16 +219,12 @@ void draw_objects()
 		case 3:
 			m1.material_azul();
 	}
-/*
-	peon1.drawNormales(1);
-
-	peon2.drawNormales(1);
-	peon3.drawNormales(1);
-	lata_cue.drawNormales(1);
-	lata_sup.drawNormales(1);
-	lata_inf.drawNormales(1);
-	*/
-if(textura == true){
+	switch(j){
+		case 1:
+			c.dibujar('s');
+			break;
+		case 2:
+			if(textura == true){
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -232,6 +245,18 @@ else{
 	glDisable(GL_TEXTURE_2D);
 }
 gluSphere (quadObj, 5, 40, 40);
+break;
+	}
+
+/*
+	peon1.drawNormales(1);
+
+	peon2.drawNormales(1);
+	peon3.drawNormales(1);
+	lata_cue.drawNormales(1);
+	lata_sup.drawNormales(1);
+	lata_inf.drawNormales(1);
+	*/
 }
 
 
@@ -275,11 +300,110 @@ glutPostRedisplay();
 // posicion x del raton
 // posicion y del raton
 //***************************************************************************
+void EnableFocos(void){
+	glDisable(GL_LIGHT0);
+	
+	GLfloat _spotlight_direction[3] = { };
+	glLightfv(GL_LIGHT3, GL_AMBIENT, light_ambient2);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, light_diffuse2);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, light_specular2);
+	glLightfv(GL_LIGHT3, GL_POSITION, light_position2);
+	glLightfv(GL_LIGHT4, GL_AMBIENT, light_ambient3);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, light_diffuse3);
+	glLightfv(GL_LIGHT4, GL_SPECULAR, light_specular3);
+	glLightfv(GL_LIGHT4, GL_POSITION, light_position3);
+	glLightfv(GL_LIGHT5, GL_AMBIENT, light_ambient4);
+	glLightfv(GL_LIGHT5, GL_DIFFUSE, light_diffuse4);
+	glLightfv(GL_LIGHT5, GL_SPECULAR, light_specular4);
+	glLightfv(GL_LIGHT5, GL_POSITION, light_position4);
+	glLightfv(GL_LIGHT3, GL_SPOT_CUTOFF,angulo);
+	glLightfv(GL_LIGHT4, GL_SPOT_CUTOFF,angulo);
+	glLightfv(GL_LIGHT5, GL_SPOT_CUTOFF,angulo);
+	
+	glEnable(GL_LIGHT3);
+	glEnable(GL_LIGHT4);
+	glEnable(GL_LIGHT5);
+
+}
+void DisableFocos(void){
+	glDisable(GL_LIGHT3);
+	glDisable(GL_LIGHT4);
+	glDisable(GL_LIGHT5);
+	glDisable(GL_LIGHT6);
+	glEnable(GL_LIGHT0);
+}
+void rotar_foco(bool direc, int foco){
+	switch (foco){
+		case 1:
+			if(direc == true){
+				light_position2[0] = (light_position2[0] * cos(angle)) - (light_position2[2] * sin(angle));
+				light_position2[2] = -(light_position2[0] * sin(angle)) + (light_position2[2] * cos(angle));
+				light_position2[1] = light_position2[1];
+			}
+			else{
+				light_position2[0] = (light_position2[0] * cos(-angle)) - (light_position2[2] * sin(-angle));
+				light_position2[2] = -(light_position2[0] * sin(-angle)) + (light_position2[2] * cos(-angle));
+				light_position2[1] = light_position2[1];
+			}
+			break;
+		case 2:
+			if(direc == true){
+				light_position3[0] = (light_position3[0] * cos(angle)) - (light_position3[2] * sin(angle));
+				light_position3[2] = -(light_position3[0] * sin(angle)) + (light_position3[2] * cos(angle));
+				light_position3[1] = light_position3[1];
+			}
+			else{
+				light_position3[0] = (light_position3[0] * cos(-angle)) - (light_position3[2] * sin(-angle));
+				light_position3[2] = -(light_position3[0] * sin(-angle)) + (light_position3[2] * cos(-angle));
+				light_position3[1] = light_position3[1];
+			}
+			break;
+		case 3:
+			if(direc == true){
+				light_position4[1] = (light_position4[1] * cos(angle)) + (light_position4[2] * sin(angle));
+				light_position4[2] = -(light_position4[1] * sin(angle)) + (light_position4[2] * cos(angle));
+				light_position4[0] = light_position4[0];
+			}
+			else{
+				light_position4[1] = (light_position4[1] * cos(-angle)) + (light_position4[2] * sin(-angle));
+				light_position4[2] = -(light_position4[1] * sin(-angle)) + (light_position4[2] * cos(-angle));
+				light_position4[0] = light_position4[0];
+			}
+			break;
+	}
+	EnableFocos();
+}
+void mover_foco(bool direccion, int foco){
+	if (foco !=0){
+		if (direccion==true){
+			rotar_foco(true,foco);
+		}
+		else {
+			rotar_foco(false,foco);
+		}
+	}
+}
 
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
 //Añadimos teclas para retocar el programa.
 		if (toupper(Tecla1)=='Q') exit(0);
+		if (focos==true){
+			switch(toupper(Tecla1)){
+				case '0':
+					foco = 1;
+					cout << "Seleccionamos foco 1"<<endl;
+					break;
+				case '9':
+					foco = 2;
+					cout << "Seleccionamos foco 2"<<endl;
+					break;
+				case '8':
+					foco = 3;
+					cout << "Seleccionamos foco 3"<<endl;
+					break;
+			}
+		}
 		switch (toupper(Tecla1)){
 			
 			case 'A': // aumentar el valor de β
@@ -310,7 +434,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 			case '4':
 				i=3;
 				break;
-			case 'L':
+			case 'T':
 				if(!textura){
 					textura = true;
 				}
@@ -318,14 +442,37 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 					textura = false;
 				}
 				break;
-			case 'M':
-				glEnable(GL_LIGHT0);
+			case 'R':
+				if(!luz){
+					luz = true;
+					glDisable(GL_LIGHT0);
+					glEnable(GL_LIGHT2);
+				}
+				else{
+					luz = false;
+					glDisable(GL_LIGHT2);
+					glEnable(GL_LIGHT0);
+				}
 				break;
-			case 'T':
-				esfera.carga_textura("./data/text-madera.jpg");
+			case 'F':
+				if(!focos){
+					focos = true;
+					EnableFocos();
+				}
+				else{
+					focos = false;
+					DisableFocos();
+				}
 				break;
-			case 'E':
-				esfera.quita_textura();
+			case 'O':
+				mover_foco(true,foco);
+				break;
+			case 'L':
+				mover_foco(false,foco);
+				break;
+			case 'B':
+				if(j==1)j=2;
+				else j=1;
 				break;
 			draw_objects();
 		}
@@ -357,6 +504,8 @@ switch (Tecla1){
 glutPostRedisplay();
 }
 
+
+
 void EnableLighting(void) {
 
 GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
@@ -364,16 +513,14 @@ GLfloat light_diffuse[]={0.5, 0.5, 0.5, 1.0};
 GLfloat light_specular[]={1.0, 1.0, 1.0, 1.0};
 GLfloat light_position[]={10.0, 5.0, 5.0, 1.0};
 GLfloat light_position1[]={1.0, 1.0, -1.0, 1.0};
-	GLfloat matSpecular[] = {1.0, 1.0, 1.0, 1.0};
-	float shininess = 20;
-GLfloat light_ambient1[]={0.3, 0.3, 0.3, 1.0};
-GLfloat light_diffuse1[]={0, 1.0, 1.0, 1.0};
-GLfloat light_specular1[]={1.0, 1.0, 0, 1.0};
+GLfloat light_ambient1[]={0.3, 0.3, 0.15, 1.0};
+GLfloat light_diffuse1[]={0.5, 0.5, 0.35, 1.0};
+GLfloat light_specular1[]={1.0, 1.0, 0.85, 1.0};
 //GLfloat light_position1[]={1.0, 1.0, 1.0, 1.0};
-/*glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient1);
+glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient1);
 glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse1);
 glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular1);
-glLightfv(GL_LIGHT2, GL_POSITION, light_position1);*/
+glLightfv(GL_LIGHT2, GL_POSITION, light_position);
 glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -525,7 +672,8 @@ lata_cue.carga_textura("./data/text-lata-1.jpg");
 esfera.esfera(20,3);
 quadObj = gluNewQuadric();
 gluQuadricTexture(quadObj, GL_TRUE);
-
+c.initialize(5,5);
+c.cargarTextura("./data/text-madera.jpg");
 //esfera.generarBarrido();
 //esfera.set_colores(1.0,1.0,1.0,1.0);
 //esfera.carga_textura("./data/text-madera.jpg");

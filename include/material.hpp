@@ -3,9 +3,9 @@
 
 struct Material{
     void material_difuso(){
-        GLfloat light_diffuse[]={0.75, 0.75, 0.75, 1.0};
+        GLfloat light_diffuse[]={0.85, 0.85, 0.85, 1.0};
         GLfloat light_diffuse1[]={1.0, 1.0, 1.0, 1.0};
-        GLfloat light_diffuse2[]={0.5, 0.5, 0.5, 1.0};
+        GLfloat light_diffuse2[]={0.65, 0.65, 0.65, 1.0};
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, light_diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, light_diffuse1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, light_diffuse2);
@@ -18,7 +18,7 @@ struct Material{
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, light_diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, light_diffuse1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, light_diffuse2);
-        	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+        	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50);
     }
     void material_metal(){
         GLfloat light_diffuse[]={0.5, 0.5, 0.5, 1.0};
