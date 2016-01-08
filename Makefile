@@ -51,7 +51,7 @@ depuracion :
 	$(CC) $(DEPURACION) $(SOURCES) -o $(TARGETS) $(LDFLAGS)
 #
 clean:
-	rm -f $(OBJECTS)
+	rm -f obj/*
 	rm -f $(TARGETS)
 
 #
@@ -66,14 +66,14 @@ redo:
 #
 #
 superclean:
-	rm -f $(OBJECTS)
+	rm -f obj/*
 	rm -f $(TEMP)
 	rm -f $(TARGETS)
 
 #
 #
 tgz:
-	rm -f $(OBJECTS)
+	rm -f obj/*
 	rm -f $(TEMP)
 	tar -zcf practica.tgz -C ./src/ . -C ../bin/ . -C ../include/ .
 
