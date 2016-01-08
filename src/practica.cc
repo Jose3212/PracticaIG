@@ -18,7 +18,8 @@ int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
 bool textura = false;
-double angle=0.1;
+const double angle=(5*M_PI/180);
+
 jpg::Imagen * Textura;
 bool luz = false;
 bool focos = false;
@@ -28,15 +29,15 @@ double eje_x[4]={0,0,0,0}, eje_y[4]={0,0,0,0};
 	GLfloat light_ambient2[]={0.0, 0.0, 0.3, 1.0};
 	GLfloat light_diffuse2[]={0.0, 0.0, 0.0, 1.0};
 	GLfloat light_specular2[]={0.0, 0.0, 1.0, 1.0};
-	GLfloat light_position2[]={5.0, 5.0, 5.0, 1.0};
+	GLfloat light_position2[]={5.0, 5.0, 5.0, 0.0};
 	GLfloat light_ambient3[]={0.3, 0.0, 0.0, 1.0};
 	GLfloat light_diffuse3[]={0.5, 0.0, 0.0, 1.0};
 	GLfloat light_specular3[]={1.0, 0.0, 0.0, 1.0};
-	GLfloat light_position3[]={-5.0, 5.0, 5.0, 1.0};
+	GLfloat light_position3[]={-5.0, 5.0, 5.0, 0.0};
 	GLfloat light_ambient4[]={0.0, 0.3, 0.0, 1.0};
 	GLfloat light_diffuse4[]={0.0, 0.5, 0.0, 1.0};
 	GLfloat light_specular4[]={0.0, 1.0, 0.0, 1.0};
-	GLfloat light_position4[]={0.0, 5.0, -5.0, 1.0};
+	GLfloat light_position4[]={0.0, 5.0, -5.0, 0.0};
 	GLfloat angulo[] = {180};
 GLuint loadTexture(jpg::Imagen* image) {
 
@@ -303,7 +304,6 @@ glutPostRedisplay();
 void EnableFocos(void){
 	glDisable(GL_LIGHT0);
 	
-	GLfloat _spotlight_direction[3] = { };
 	glLightfv(GL_LIGHT3, GL_AMBIENT, light_ambient2);
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, light_diffuse2);
 	glLightfv(GL_LIGHT3, GL_SPECULAR, light_specular2);
@@ -316,9 +316,6 @@ void EnableFocos(void){
 	glLightfv(GL_LIGHT5, GL_DIFFUSE, light_diffuse4);
 	glLightfv(GL_LIGHT5, GL_SPECULAR, light_specular4);
 	glLightfv(GL_LIGHT5, GL_POSITION, light_position4);
-	glLightfv(GL_LIGHT3, GL_SPOT_CUTOFF,angulo);
-	glLightfv(GL_LIGHT4, GL_SPOT_CUTOFF,angulo);
-	glLightfv(GL_LIGHT5, GL_SPOT_CUTOFF,angulo);
 	
 	glEnable(GL_LIGHT3);
 	glEnable(GL_LIGHT4);
@@ -333,42 +330,58 @@ void DisableFocos(void){
 	glEnable(GL_LIGHT0);
 }
 void rotar_foco(bool direc, int foco){
+	GLfloat position[4];
+	position[3]={1.0};
+	
 	switch (foco){
 		case 1:
 			if(direc == true){
-				light_position2[0] = (light_position2[0] * cos(angle)) - (light_position2[2] * sin(angle));
-				light_position2[2] = -(light_position2[0] * sin(angle)) + (light_position2[2] * cos(angle));
-				light_position2[1] = light_position2[1];
+				position[0]=(light_position2[0]*cos(angle))-(light_position2[2]*sin(angle));
+				position[1]=light_position2[1];
+				position[2]=(light_position2[0]*sin(angle))+(light_position2[2]*cos(angle));
+				for(int i=0; i<4;i++)light_position2[i]=position[i];
 			}
 			else{
-				light_position2[0] = (light_position2[0] * cos(-angle)) - (light_position2[2] * sin(-angle));
-				light_position2[2] = -(light_position2[0] * sin(-angle)) + (light_position2[2] * cos(-angle));
-				light_position2[1] = light_position2[1];
+				position[0]=(light_position2[0]*cos(-angle))-(light_position2[2]*sin(-angle));
+				position[1]=light_position2[1];
+				position[2]=(light_position2[0]*sin(-angle))+(light_position2[2]*cos(-angle));
+				for(int i=0; i<4;i++)light_position2[i]=position[i];
+
 			}
+
 			break;
 		case 2:
 			if(direc == true){
-				light_position3[0] = (light_position3[0] * cos(angle)) - (light_position3[2] * sin(angle));
-				light_position3[2] = -(light_position3[0] * sin(angle)) + (light_position3[2] * cos(angle));
-				light_position3[1] = light_position3[1];
+				position[0]=(light_position3[0]*cos(angle))-(light_position3[2]*sin(angle));
+				position[1]=light_position3[1];
+				position[2]=(light_position3[0]*sin(angle))+(light_position3[2]*cos(angle));
+				for(int i=0; i<4;i++)light_position3[i]=position[i];
+
 			}
+			
 			else{
-				light_position3[0] = (light_position3[0] * cos(-angle)) - (light_position3[2] * sin(-angle));
-				light_position3[2] = -(light_position3[0] * sin(-angle)) + (light_position3[2] * cos(-angle));
-				light_position3[1] = light_position3[1];
+				position[0]=(light_position3[0]*cos(-angle))-(light_position3[2]*sin(-angle));
+				position[1]=light_position3[1];
+				position[2]=(light_position3[0]*sin(-angle))+(light_position3[2]*cos(-angle));
+				for(int i=0; i<4;i++)light_position3[i]=position[i];
+
 			}
+
 			break;
 		case 3:
 			if(direc == true){
-				light_position4[1] = (light_position4[1] * cos(angle)) + (light_position4[2] * sin(angle));
-				light_position4[2] = -(light_position4[1] * sin(angle)) + (light_position4[2] * cos(angle));
-				light_position4[0] = light_position4[0];
+				position[0]=light_position4[0];
+				position[1]=(light_position4[1]*cos(angle))+(light_position4[2]*sin(angle));
+				position[2]=-(light_position4[1]*sin(angle))+(light_position4[2]*cos(angle));
+				for(int i=0; i<4;i++)light_position4[i]=position[i];
 			}
 			else{
-				light_position4[1] = (light_position4[1] * cos(-angle)) + (light_position4[2] * sin(-angle));
-				light_position4[2] = -(light_position4[1] * sin(-angle)) + (light_position4[2] * cos(-angle));
-				light_position4[0] = light_position4[0];
+				position[0]=light_position4[0];
+				position[1]=(light_position4[1]*cos(-angle))+(light_position4[2]*sin(-angle));
+				position[2]=-(light_position4[1]*sin(-angle))+(light_position4[2]*cos(-angle));
+				for(int i=0; i<4;i++)light_position4[i]=position[i];
 			}
+
 			break;
 	}
 	EnableFocos();
