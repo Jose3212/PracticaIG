@@ -459,11 +459,13 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 				if(!luz){
 					luz = true;
 					glDisable(GL_LIGHT0);
+					glDisable(GL_LIGHT1);
 					glEnable(GL_LIGHT2);
 				}
 				else{
 					luz = false;
 					glDisable(GL_LIGHT2);
+					glDisable(GL_LIGHT1);
 					glEnable(GL_LIGHT0);
 				}
 				break;
