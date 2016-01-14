@@ -4,7 +4,7 @@
 #
 TARGETS= ./bin/practica
 
-SOURCES= src/practica.cc src/3Dmodel.cc src/dibujos.cc src/modeloPly.cc src/file_ply_stl.cc src/jerarquia.cc src/jpg_imagen.cpp src/jpg_readwrite.cpp src/jpg_memsrc.cpp src/3Dfigures.cpp src/cuadro.cpp
+SOURCES= src/practica.cc src/3Dmodel.cc src/dibujos.cc src/modeloPly.cc src/file_ply_stl.cc src/jerarquia.cc src/jpg_imagen.cpp src/jpg_readwrite.cpp src/jpg_memsrc.cpp src/3Dfigures.cpp src/cuadro.cpp src/camara.cpp
 TEMP = src/*~ include/*~
 OBJECTS=	$(SOURCES:src/%.cc=obj/%.o)
 OBJETOS=	$(SOURCES:src/%.cpp=obj/%.o)

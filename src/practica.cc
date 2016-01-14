@@ -13,18 +13,24 @@
 #include "jerarquia.hpp"
 #include "material.hpp"
 #include "cuadro.h"
+#include "camara.hpp"
 using namespace std;
 int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
 bool textura = false;
 const double angle=(5*M_PI/180);
-
+double xant = 0, yant = 0;
 jpg::Imagen * Textura;
 bool luz = false;
 bool focos = false;
+float mouseSensitivity = 0.15f;
+
 int foco;
+int camaraActiva = 0;
 cuadro c;
+Camara cam_1(10,2,0);
+vector <Camara> camaras;
 double eje_x[4]={0,0,0,0}, eje_y[4]={0,0,0,0};
 	GLfloat light_ambient2[]={0.0, 0.0, 0.3, 1.0};
 	GLfloat light_diffuse2[]={0.0, 0.0, 0.0, 1.0};
@@ -119,7 +125,8 @@ int UI_window_pos_x=50,UI_window_pos_y=50,UI_window_width=500,UI_window_height=5
 //**************************************************************************
 //
 //***************************************************************************
-
+enum raton {MOVIENDO_CAMARA_FIRSTPERSON, NOT_MOVING};
+raton estadoRaton;
 void clear_window()
 {
 
@@ -152,9 +159,10 @@ void change_observer()
 // posicion del observador
 glMatrixMode(GL_MODELVIEW);
 glLoadIdentity();
-glTranslatef(0,0,-Observer_distance);
-glRotatef(Observer_angle_x,1,0,0);
-glRotatef(Observer_angle_y,0,1,0);
+//glTranslatef(0,0,-Observer_distance);
+//glRotatef(Observer_angle_x,1,0,0);
+//glRotatef(Observer_angle_y,0,1,0);
+camaras[camaraActiva].set_vision();
 }
 
 void cambiaLuz(){
@@ -420,8 +428,20 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 			}
 		}
 		switch (toupper(Tecla1)){
+			case 'W':
+				camaras[camaraActiva].cambia_posicion(0,0,0,1);
+				break;
+			case 'D':
+				camaras[camaraActiva].cambia_posicion(0,0,1,0);
+				break;
+			case 'A':
+				camaras[camaraActiva].cambia_posicion(0,1,0,0);
+				break;
+			case 'S':
+				camaras[camaraActiva].cambia_posicion(1,0,0,0);
+				break;
 			
-			case 'A': // aumentar el valor de β
+			case 'V': // aumentar el valor de β
 				light_beta +=1;
 				cambiaLuz();
 				break;
@@ -514,7 +534,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 void special_keys(int Tecla1,int x,int y)
 {
 
-switch (Tecla1){
+switch (toupper(Tecla1)){
 	case GLUT_KEY_LEFT:Observer_angle_y--;break;
 	case GLUT_KEY_RIGHT:Observer_angle_y++;break;
 	case GLUT_KEY_UP:Observer_angle_x--;break;
@@ -600,7 +620,24 @@ glViewport(0,0,UI_window_width,UI_window_height);
 // Se encarga de iniciar la ventana, asignar las funciones e comenzar el
 // bucle de eventos
 //***************************************************************************
-
+void clickRaton( int boton, int estado, int x, int y ){
+	if ( boton == GLUT_RIGHT_BUTTON ){
+		if ( estado == GLUT_DOWN ){
+			estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
+		}
+		else{
+			estadoRaton = NOT_MOVING;
+		}
+	}
+}
+void ratonMovido( int x, int y ){ 
+	if ( estadoRaton==MOVIENDO_CAMARA_FIRSTPERSON){
+		camaras[camaraActiva].girar_vista((y-yant)*mouseSensitivity,(x-xant)*mouseSensitivity);
+		xant=x;yant=y;
+		cout<<" y "<< y <<" x "<< x << endl;
+	}
+	glutPostRedisplay();
+}
 int main(int argc, char **argv)
 {
 
@@ -695,6 +732,7 @@ quadObj = gluNewQuadric();
 gluQuadricTexture(quadObj, GL_TRUE);
 c.initialize(4,4);
 c.cargarTextura("./data/text-lata-1.jpg");
+camaras.push_back(cam_1);
 //esfera.generarBarrido();
 //esfera.set_colores(1.0,1.0,1.0,1.0);
 //esfera.carga_textura("./data/text-madera.jpg");
@@ -720,6 +758,8 @@ glutKeyboardFunc(normal_keys);
 // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
 glutSpecialFunc(special_keys);
 
+glutMouseFunc( clickRaton );
+glutMotionFunc( ratonMovido );
 // funcion de inicialización
 initialize();
 
