@@ -14,23 +14,39 @@
 #include "material.hpp"
 #include "cuadro.h"
 #include "camara.hpp"
+#include "camaraOrtho.h"
 using namespace std;
 int i,j;
 float light_alpha = 0.0;
 float light_beta = 0.0;
 bool textura = false;
 const double angle=(5*M_PI/180);
-double xant = 0, yant = 0;
+double xant = -1, yant = -1;
 jpg::Imagen * Textura;
 bool luz = false;
 bool focos = false;
+int figuraSeleccionada;
 float mouseSensitivity = 0.15f;
-
+bool model1_color_orig = true;
+bool model2_color_orig = true;
 int foco;
 int camaraActiva = 0;
+int iCamara;
+int frustum=0;
+bool cubo = false;
+float obs_x=0, obs_y=0, obs_z=30, mirada_x=0, mirada_y=0, mirada_z=0, vec_obs_x=0, vec_obs_y=1, vec_obs_z=0;
+//variables de ayuda con el ratón
+float sensibilidad = 0.4;
+int aux_x=-1;
+int aux_y=-1;
+bool moviendoCamara = false;
 cuadro c;
 Camara cam_1(10,2,0);
 vector <Camara> camaras;
+vector <camaraOrtho> camarasP;
+bool cambio = false;
+int mov_raton =1;
+
 double eje_x[4]={0,0,0,0}, eje_y[4]={0,0,0,0};
 	GLfloat light_ambient2[]={0.0, 0.0, 0.3, 1.0};
 	GLfloat light_diffuse2[]={0.0, 0.0, 0.0, 1.0};
@@ -78,6 +94,7 @@ GLuint loadTexture(jpg::Imagen* image) {
 }
 GLuint _textureId;
 
+GLint rendermode;
 
 /*
 Brazo brazo;
@@ -94,8 +111,16 @@ GLUquadric  *quadObj;
 //Los ponemos como variables globales para no tener que pasar parametros a las funciones a traves del main.
 Cubo c1(5);
 Tetraedro t1(5);
-
-
+/*
+ModeloPly model1("./data/beethoven.ply");
+ModeloPly model2("./data/beethoven.ply");
+*/
+ModeloPly bet1("./data/beethoven.ply");
+ModeloPly bet2("./data/beethoven.ply");
+ModeloPly bet3("./data/beethoven.ply");
+ModeloPly bet4("./data/beethoven.ply");
+ModeloPly bet5("./data/beethoven.ply");
+ModeloPly bet6("./data/beethoven.ply");
 ModeloPly peon1("./data/perfil.ply");
 ModeloPly peon2("./data/perfil.ply");
 ModeloPly peon3("./data/perfil.ply");
@@ -140,12 +165,13 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 void change_projection()
 {
-
+const GLfloat ratio = GLfloat(UI_window_height) / GLfloat(UI_window_width);
 glMatrixMode(GL_PROJECTION);
 glLoadIdentity();
 
 // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
 //  Front_plane>0  Back_plane>PlanoDelantero)
+cout<< " ala 2"<< endl;
 glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
 }
 
@@ -155,14 +181,15 @@ glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Ba
 
 void change_observer()
 {
-
+ 
 // posicion del observador
 glMatrixMode(GL_MODELVIEW);
 glLoadIdentity();
+if(cambio){cout<<"Entro"<<endl;camarasP[iCamara].setObservador();}
 //glTranslatef(0,0,-Observer_distance);
 //glRotatef(Observer_angle_x,1,0,0);
 //glRotatef(Observer_angle_y,0,1,0);
-camaras[camaraActiva].set_vision();
+else{camaras[camaraActiva].set_vision();}
 }
 
 void cambiaLuz(){
@@ -189,7 +216,63 @@ void cambiaLuz(){
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
+void cambiarCamara(){
 
+  gluLookAt (obs_x, obs_y, obs_z, mirada_x, mirada_y, mirada_z, vec_obs_x, vec_obs_y, vec_obs_z);
+}
+void cambiarObservador(){
+  mov_raton=0;
+  aux_x = aux_y = -1;
+
+  switch(iCamara){
+  case 0: 
+    obs_x = 0;
+    obs_y = 0;
+    obs_z = 50;
+    mirada_x= 0;
+    mirada_y= 0;
+    mirada_z= 0;
+    vec_obs_x = 0;
+    vec_obs_y = 1;
+    vec_obs_z = 0;
+    break;
+  case 1: 
+    obs_x = 0;
+    obs_y = 50;
+    obs_z = 0;
+    mirada_x= 0;
+    mirada_y= 0;
+    mirada_z= 0;
+    vec_obs_x = 0;
+    vec_obs_y = 0;
+    vec_obs_z = 1;
+    break;
+  case 2: 
+    obs_x = 50;
+    obs_y = 0;
+    obs_z = 0;
+    mirada_x= 0;
+    mirada_y= 0;
+    mirada_z= 0;
+    vec_obs_x = 0;
+    vec_obs_y = 1;
+    vec_obs_z = 0;
+    break;
+  }
+}
+void iniciarCamaras(){
+	 GLfloat ratio; 
+  ratio = GLfloat(UI_window_height) / GLfloat(UI_window_width);
+  camaraOrtho c1(0,0,50,0,0,0,0,1,0,0,0,0);
+  camaraOrtho c2(0,50,0,0,0,0,0,0,1,90,180,0);
+  camaraOrtho c3(50,0,0,0,0,0,0,1,0,0,-90,0);
+  c1.setProyeccion(-Window_width,Window_width,-Window_height * ratio,Window_height * ratio,Front_plane,Back_plane);
+c2.setProyeccion(-Window_width,Window_width,-Window_height * ratio,Window_height * ratio,Front_plane,Back_plane);
+c3.setProyeccion(-Window_width,Window_width,-Window_height * ratio,Window_height * ratio,Front_plane,Back_plane);
+  camarasP.push_back(c1);
+  camarasP.push_back(c2);
+  camarasP.push_back(c3);
+}
 void draw_axis()
 {
 glBegin(GL_LINES);
@@ -266,6 +349,41 @@ break;
 	lata_sup.drawNormales(1);
 	lata_inf.drawNormales(1);
 	*/
+
+    //dibujamos los beethoven
+	if(!cubo){
+        glPushMatrix();
+		glTranslatef(-10,0,-5);
+    glLoadName(1);
+    bet1.drawModel(3);
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(0,0,-5);
+    glLoadName(2);
+    bet2.drawModel(3);
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(10,0,-5);
+    glLoadName(3);
+    bet3.drawModel(3);
+	glPopMatrix();
+    glPushMatrix();
+	glTranslatef(-10,0,5);
+    glLoadName(4);
+    bet4.drawModel(3);
+    glPopMatrix();
+    glPushMatrix();
+	glTranslatef(0,0,5);
+    glLoadName(5);
+    bet5.drawModel(3);
+    glPopMatrix();
+    glPushMatrix();
+	glTranslatef(10,0,5);
+    glLoadName(6);
+    bet6.drawModel(3);
+glPopMatrix();
+	}
+	else{c1.drawModel(1);}
 }
 
 
@@ -275,7 +393,6 @@ break;
 
 void draw_scene(void)
 {
-
 clear_window();
 change_observer();
 draw_axis();
@@ -409,6 +526,8 @@ void mover_foco(bool direccion, int foco){
 
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
+	  GLfloat ratio; 
+  ratio = GLfloat(UI_window_height) / GLfloat(UI_window_width);
 //Añadimos teclas para retocar el programa.
 		if (toupper(Tecla1)=='Q') exit(0);
 		if (focos==true){
@@ -440,23 +559,46 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 			case 'S':
 				camaras[camaraActiva].cambia_posicion(1,0,0,0);
 				break;
-			
-			case 'V': // aumentar el valor de β
-				light_beta +=1;
-				cambiaLuz();
+			case 'M':
+				camarasP[iCamara].desplazar('w');
 				break;
-			case 'Z': // disminuir el valor de β
-				light_beta-=1;
-				cambiaLuz();
+			case 'N':
+				camarasP[iCamara].desplazar('s');
 				break;
-			case 'X': // aumentar el valor de α
-				light_alpha+=1;
-				cambiaLuz();
-				break;
-			case 'C': // disminuir el valor de α
-				light_alpha-=1;
-				cambiaLuz();
-				break;
+			case 'V':
+    camarasP[iCamara].cambiarEsferica();
+    break;
+
+    //alzado
+
+	case 'I':
+		if(!cambio)cambio = true;
+		else cambio = false;
+		break;
+  case 'Z': 
+    iCamara=0;    
+    aux_x = aux_y = -1;
+    camarasP[iCamara].cambiarProyeccion(0);
+    break;
+    //planta
+  case 'X': 
+    iCamara=1;
+    aux_x = aux_y = -1;
+    camarasP[iCamara].cambiarProyeccion(1);
+    break;
+    //perfil
+  case 'C': 
+    iCamara=2;
+    aux_x = aux_y = -1;
+    camarasP[iCamara].cambiarProyeccion(0);
+    break;
+  case 'R':
+    camarasP[iCamara].reset();
+    break;
+
+    ///////////////////////
+    //sección aún no utilizada
+
 			case '1':
 				i=0;
 				break;
@@ -481,7 +623,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 					textura = false;
 				}
 				break;
-			case 'R':
+			/*case 'R':
 				if(!luz){
 					luz = true;
 					glDisable(GL_LIGHT0);
@@ -494,7 +636,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 					glDisable(GL_LIGHT1);
 					glEnable(GL_LIGHT0);
 				}
-				break;
+				break;*/
 			case 'F':
 				if(!focos){
 					focos = true;
@@ -512,12 +654,13 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 				mover_foco(false,foco);
 				break;
 			case 'B':
-				if(j==1)j=2;
-				else j=1;
+				if(cubo==true)j=cubo=false;
+				else cubo=true;
 				break;
-			draw_objects();
+			//draw_objects();
 		}
 	//Pintamos de nuevo
+	draw_objects();
 	glutPostRedisplay();
 }
 
@@ -589,14 +732,15 @@ glShadeModel(GL_SMOOTH);
 
 void initialize(void)
 {
+	 
 // se inicalizan la ventana y los planos de corte
-Window_width=5;
-Window_height=5;
-Front_plane=10;
+Window_width=0.5;
+Window_height=0.5;
+Front_plane=1.5;
 Back_plane=1000;
 
 // se inicia la posicion del observador, en el eje z
-Observer_distance=2*Front_plane;
+Observer_distance=15*Front_plane;
 Observer_angle_x=0;
 Observer_angle_y=0;
 
@@ -607,10 +751,11 @@ glClearColor(1,1,1,1);
 // se habilita el z-bufer
 glEnable(GL_DEPTH_TEST);
 //
-EnableLighting();
+//EnableLighting();
 change_projection();
 //
 glViewport(0,0,UI_window_width,UI_window_height);
+iniciarCamaras();
 }
 
 
@@ -620,7 +765,101 @@ glViewport(0,0,UI_window_width,UI_window_height);
 // Se encarga de iniciar la ventana, asignar las funciones e comenzar el
 // bucle de eventos
 //***************************************************************************
+void procesar_hits(GLint hits, GLuint *names)
+{
+	i=names[3];
+cout << "Hits="<<hits<< " - " << i<<endl;
+	if (hits > 0)
+	{
+bet1.set_colores(1,1,0);
+  bet2.set_colores(1,1,0);
+  bet3.set_colores(1,1,0);
+  bet4.set_colores(1,1,0);
+  bet5.set_colores(1,1,0);
+  bet6.set_colores(1,1,0);
+  switch(i){
+  case 1: 
+    bet1.set_colores(1,0,0); 
+figuraSeleccionada=1;
+    break;
+  case 2: 
+    bet2.set_colores(1,0,0); 
+figuraSeleccionada=2;
+    break;
+  case 3: 
+    bet3.set_colores(1,0,0); 
+figuraSeleccionada=3;
+    break;
+  case 4: 
+    bet4.set_colores(1,0,0); 
+figuraSeleccionada=4;
+    break;
+  case 5: 
+    bet5.set_colores(1,0,0); 
+figuraSeleccionada=5;
+    break;
+  case 6: 
+    bet6.set_colores(1,0,0); 
+figuraSeleccionada=6;
+    break;
+//camarasP[iCamara].activarExplorar(esc.centroGiro());
+	}
+
+}
+}
+int pick( int x, int y){
+	cout << "PICK x=" << x << ",y=" << y << endl;
+
+	GLuint selectBuf[100]={0};
+	GLint viewport[4], hits=0;
+
+	// Declarar buffer de selección
+	glSelectBuffer(100, selectBuf);
+
+	// Obtener los parámetros del viewport
+	glGetIntegerv (GL_VIEWPORT, viewport);
+
+	// Pasar OpenGL a modo selección
+	glRenderMode (GL_SELECT);
+	glInitNames();
+	glPushName(0);
+
+	// Fijar la transformación de proyección para la selección
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPickMatrix(x,(viewport[3] - y),5.0, 5.0, viewport);
+	float ratio =  UI_window_width * 1.0 / UI_window_height;
+	cout<< " ala "<<endl;
+	glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+
+	// Dibujar la escena
+	draw_scene();
+
+	// Pasar OpenGL a modo render
+	hits = glRenderMode (GL_RENDER);
+
+	// Restablecer la transformación de proyección
+	glMatrixMode (GL_PROJECTION);
+	glLoadIdentity();
+	// Set the viewport to be the entire window
+	glViewport(0, 0, UI_window_width, UI_window_height);
+
+	// Set the correct perspective.
+	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+
+	// Procesar el contenido del buffer de selección
+	procesar_hits(hits, selectBuf);
+
+	// Dibujar la escena para actualizar cambios
+	draw_scene();
+}
+
 void clickRaton( int boton, int estado, int x, int y ){
+	if(boton == GLUT_LEFT_BUTTON){
+	pick(x,y);
+	}
+
+else {if(!cambio){
 	if ( boton == GLUT_RIGHT_BUTTON ){
 		if ( estado == GLUT_DOWN ){
 			estadoRaton = MOVIENDO_CAMARA_FIRSTPERSON;
@@ -630,13 +869,44 @@ void clickRaton( int boton, int estado, int x, int y ){
 		}
 	}
 }
-void ratonMovido( int x, int y ){ 
+
+
+else{
+		if ( boton == GLUT_RIGHT_BUTTON )
+  { 
+    if ( estado == GLUT_DOWN ){
+      moviendoCamara= true;
+    }
+    else{
+      moviendoCamara= false;
+    }
+  }
+	}
+
+}
+}
+void ratonMovido( int x, int y ){
+	if(!cambio){
 	if ( estadoRaton==MOVIENDO_CAMARA_FIRSTPERSON){
 		camaras[camaraActiva].girar_vista((y-yant)*mouseSensitivity,(x-xant)*mouseSensitivity);
 		xant=x;yant=y;
 		cout<<" y "<< y <<" x "<< x << endl;
 	}
 	glutPostRedisplay();
+}
+else{
+	if (moviendoCamara && aux_x != -1)
+  {
+    float dif_x = (x-aux_x)*sensibilidad;
+    float dif_y = (y-aux_y)*sensibilidad;
+
+    camarasP[iCamara].girar(dif_x,dif_y);
+
+  }
+  aux_x = x;
+  aux_y =y;
+  glutPostRedisplay();
+}
 }
 int main(int argc, char **argv)
 {

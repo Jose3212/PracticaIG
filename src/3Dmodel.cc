@@ -135,7 +135,7 @@ void Modelo::drawModel(int i){
 		x=1;
 		break;
 	case 1:
-		dibujo = GL_LINES; //Pintamos Lineas
+		dibujo = GL_LINE_STRIP; //Pintamos Lineas
 		y=1;
 		break;
 	case 4:
@@ -143,11 +143,12 @@ void Modelo::drawModel(int i){
 		drawModel(1);
 	default:
 		dibujo = GL_TRIANGLES; //Dibujamos triangulos para el sólido, o modo ajedrez
-		x=0.8;
-		y=0.8;
-		z=0.8;
+		x=colore._0;
+		y=colore._1;
+		z=colore._2;
 		break;
 	}
+	glEnable(GL_COLOR_MATERIAL);
 	glPointSize(4);
 	glBegin(dibujo);
 	for(int j =0; j < triangulos.size();j++){
@@ -215,6 +216,7 @@ void Modelo::drawNormales(int i){
     else{
         glEnable(GL_COLOR_MATERIAL);
         glDisable(GL_TEXTURE_2D);
+		glColor3f(colore._0,colore._1,colore._2);
     }
 
 	if(i==0){

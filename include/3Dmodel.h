@@ -31,11 +31,10 @@ public:
     void quita_textura(){
         imagen = NULL;
     }
-    void set_colores(double r, double g, double b, double a){
+    void set_colores(double r, double g, double b){
         colore._0=r;
         colore._1=g;
         colore._2=b;
-        colore._3=a;
     }
     void carga_textura(const string & ruta){
         imagen = new jpg::Imagen(ruta);
